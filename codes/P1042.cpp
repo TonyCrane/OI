@@ -18,7 +18,7 @@ int main()
 		}
 		cnt++;
 	}
-	printf("%d:%d\n", w, l);
+	printf("%d:%d\n\n", w, l);
 	w = 0; l = 0;
 
 	for (int i = 0; i < cnt; ++i)
