@@ -26,7 +26,7 @@ if [ $? -ne 0 ] ; then
 	echo "\n\n编译错误！"
 	exit
 fi
-echo -e "\n编译成功"
+echo -e "\n编译成功\n"
 
 ./$filename < $filename.in > a.out
 diff --ignore-space-change --ignore-blank-lines $filename.out a.out
@@ -35,11 +35,12 @@ if [ $? -ne 0 ] ; then
 	exit
 fi
 
-echo -e "\n样例通过，用时："
+cat a.out
+echo -e "\n\n样例通过，用时："
 /usr/bin/time -f "time: %U\n" ./$filename < $filename.in > a.out
 
 y="y"
-read -p "是否使用gedit打开文件?(y/n)" op1
+read -p "是否使用gedit打开文件?(y/n) > " op1
 if [ $op1 = $y ] ; then
 	gedit $filename.cpp
 fi
