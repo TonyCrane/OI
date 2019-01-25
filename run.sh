@@ -55,3 +55,5 @@ if [ $op = $y ] ; then
 	echo "整理成功"
 fi
 
+sleep 2s
+clear

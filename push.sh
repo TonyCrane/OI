@@ -10,3 +10,6 @@ git commit -m "$commit"
 echo -e "\n\n"
 
 git push $origin master
+
+sleep 3s
+clear
