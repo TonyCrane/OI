@@ -7,11 +7,11 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int maxn = 150;
-const int inf = 100000000;
+const int maxn = 200;
+const int inf = 0x3f3f3f3f;
 
 int n;
-double dist[maxn][maxn], ldis[maxn], li, l2 = inf, ans;
+double dis[maxn][maxn], ldis[maxn], l1 = 0, l2 = inf, ans;
 
 struct Point
 {
@@ -43,15 +43,25 @@ int main()
 			for (int j = 1; j <= n; ++j)
 				if (dis[i][k] + dis[k][j] < dis[i][j])
 					dis[i][j] = dis[i][k] + dis[k][j];
-	
-	//find
+	memset(ldis, 0, sizeof(ldis));
+//	for (int i = 1; i <= n; ++i)
+//		ldis[i] = 0;
+//	cout<<dis[149][150]<<endl;
+	//old
 	for (int i = 1; i <= n; ++i)
 		for (int j = 1; j <= n; ++j)
 		{
 			if (dis[i][j] != inf) ldis[i] = max(dis[i][j], ldis[i]);
-			li = max(li, ldis[i]);
+			l1 = max(l1, ldis[i]);
 		}
 
-	//try
+	//new
+	for (int i = 1; i <= n; ++i)
+		for (int j = 1; j <= n; ++j)
+			if (dis[i][j] == inf)
+				l2 = min(ldis[i] + point[i].distance(point[j]) + ldis[j], l2);
 	
+	ans = max(l1, l2);
+	printf("%.6f\n", ans);
+	return 0;
 }
