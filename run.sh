@@ -23,7 +23,7 @@ echo -e "\n成功读取文件"
 
 g++ -o $filename $filename.cpp
 if [ $? -ne 0 ] ; then
-	echo "\n\n编译错误！"
+	echo -e "\n\n编译错误！"
 	exit
 fi
 echo -e "\n编译成功\n"
@@ -53,7 +53,6 @@ if [ $op = $y ] ; then
 	mv $filename.cpp codes/
 	mv $filename.in inputs/
 	echo "整理成功"
+	sleep 2s
+	clear
 fi
-
-sleep 2s
-clear
