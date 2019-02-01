@@ -40,10 +40,6 @@ echo -e "\n\n样例通过，用时："
 /usr/bin/time -f "time: %U\n" ./$filename < $filename.in > a.out
 
 y="y"
-read -p "是否使用gedit打开文件?(y/n) > " op1
-if [ $op1 = $y ] ; then
-	gedit $filename.cpp
-fi
 
 read -p "是否整理文件?(y/n) > " op
 if [ $op = $y ] ; then
