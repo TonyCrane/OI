@@ -21,7 +21,7 @@ cd ~
 echo -e "\nAll:      \c"
 cat cnt_ans
 
-rm cnt_ans
+rm cnt_py
 rm cnt_cpp
 rm cnt_md
-rm cnt_py
+rm ~/Desktop/luogu/cnt_ans
