@@ -24,4 +24,4 @@ cat cnt_ans
 rm cnt_py
 rm cnt_cpp
 rm cnt_md
-rm ~/Desktop/luogu/cnt_ans
+rm cnt_ans
