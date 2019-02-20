@@ -8,6 +8,7 @@
 using namespace std;
 
 int ufs[20];
+string s;
  
 struct Point
 {
@@ -54,6 +55,7 @@ int main()
     int n;
 	for (int t = 1; t <= tmp; ++t)
 	{
+		getline(cin, s);
 		scanf("%d",&n);
         for (int i = 1; i <= n; i++)
             p[i].read();
@@ -78,6 +80,8 @@ int main()
             if (a == b) puts("CONNECTED");
             else puts("NOT CONNECTED");
         }
+		if (t != tmp)
+			printf("\n");
     }
     return 0;
 }
