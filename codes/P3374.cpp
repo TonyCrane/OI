@@ -47,7 +47,7 @@ int main()
 	{
 		int a, b, c;
 		scanf("%d %d %d", &a, &b, &c);
-		if (a == 1) add(a, c);
+		if (a == 1) add(b, c);
 		if (a == 2) printf("%d\n", sum(c) - sum(b - 1));
 	}
 	return 0;
