@@ -1,0 +1,9 @@
+#!/bin/bash
+
+read -p "请输入要删除的题目(无后缀名) > " filename
+rm $filename.in
+rm $filename.out
+rm $filename.cpp
+echo -e "删除成功！\n\n> ls"
+ls --color=auto -F 
+echo -e "\n"
