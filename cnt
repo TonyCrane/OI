@@ -1,19 +1,19 @@
 #!/bin/bash
 
 echo -e "Cpp:      \c"
-find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" -name "*.cpp" | xargs cat | wc -l
+find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" ! -path "/home/tony/Desktop/blog/node_modules/*" -name "*.cpp" | xargs cat | wc -l
 
 echo -e "Markdown: \c"
-find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" -name "*.md" | xargs cat | wc -l
+find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" ! -path "/home/tony/Desktop/blog/node_modules/*" -name "*.md" | xargs cat | wc -l
 
 echo -e "Python:   \c"
-sudo find ~ -path "*/manim/manim/manim_projects/*.py" -o -path "*/Desktop/*.py" | xargs cat | wc -l
+sudo find ~ -path "*/manim/manim/manim_projects/*.py" -o -path "*/Desktop/*.py" ! -path "/home/tony/Desktop/blog/node_modules/*" | xargs cat | wc -l
 
-find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" -name "*.cpp" | xargs cat | wc -l > ~/cnt_cpp
+find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" ! -path "/home/tony/Desktop/blog/node_modules/*" -name "*.cpp" | xargs cat | wc -l > ~/cnt_cpp
 
-find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" -name "*.md" | xargs cat | wc -l > ~/cnt_md
+find ~/Desktop ! -path "/home/tony/Desktop/aoapc-bac2nd/*" ! -path "/home/tony/Desktop/blog/node_modules/*" -name "*.md" | xargs cat | wc -l > ~/cnt_md
 
-sudo find ~ -path "*/manim/manim/manim_projects/*.py" -o -path "*/Desktop/*.py" | xargs cat | wc -l > ~/cnt_py
+sudo find ~ -path "*/manim/manim/manim_projects/*.py" -o -path "*/Desktop/*.py" ! -path "/home/tony/Desktop/blog/node_modules/*" | xargs cat | wc -l > ~/cnt_py
 
 cd ~
 ./cnt_add
