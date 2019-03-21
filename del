@@ -1,9 +1,26 @@
 #!/bin/bash
 
-read -p "请输入要删除的题目(无后缀名) > " filename
-rm $filename.in
-rm $filename.out
-rm $filename.cpp
-echo -e "删除成功！\n\n> ls"
-ls --color=auto -F 
-echo -e "\n"
+cpp="--cpp"
+hel="--help"
+if [ -n "$1" ]; then
+	if [[ $2 = $cpp ]]; then
+		rm $1.in
+		rm $1.out
+		rm $1.cpp
+		echo -e "删除成功！\n> ls"
+		ls --color=auto -F 
+	elif [[ $1 = $hel ]]; then
+		echo -e "帮助:\n\t使用 del <filename> 来删除 filename.in filename.out"
+		echo -e "\t使用 del <filename> --cpp 来删除 filename.in filename.out filename.cpp"
+		echo -e "\t使用 del --help 来查看帮助"
+	else
+		rm $1.in
+		rm $1.out
+		echo -e "删除成功！\n> ls"
+		ls --color=auto -F 
+	fi
+else
+	echo -e "\033[1;31m[ERROR]\033[0m 无传入参数"
+	echo -e "\tdel --help 查看帮助"
+	false
+fi
