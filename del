@@ -7,7 +7,7 @@ if [ -n "$1" ]; then
 		rm $1.in
 		rm $1.out
 		rm $1.cpp
-		echo -e "删除成功！\n> ls"
+		echo -e "删除文件 $1.in $1.out $1.cpp\n> ls"
 		ls --color=auto -F 
 	elif [[ $1 = $hel ]]; then
 		echo -e "帮助:\n\t使用 del <filename> 来删除 filename.in filename.out"
@@ -16,7 +16,7 @@ if [ -n "$1" ]; then
 	else
 		rm $1.in
 		rm $1.out
-		echo -e "删除成功！\n> ls"
+		echo -e "删除文件 $1.in $1.out\n> ls"
 		ls --color=auto -F 
 	fi
 else

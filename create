@@ -1,9 +1,26 @@
 #!/bin/bash
 
+cpp="--cpp"
+hel="--help"
 if [ -n "$1" ]; then
-	touch $1.in
-	touch $1.out
-	echo "成功创建文件 $1.in $1.out"
+	if [[ $2 = $cpp ]]; then
+		touch $1.in
+		touch $1.out
+		touch $1.cpp
+		echo -e "成功创建文件 $1.in $1.out $1.cpp\n> ls"
+		ls --color=auto -F
+	elif [[ $1 = $hel ]]; then
+		echo -e "帮助:\n\t使用 create <filename> 来创建 filename.in filename.out"
+		echo -e "\t使用 create <filename> --cpp 来创建 filename.in filename.out filename.cpp"
+		echo -e "\t使用 create --help 来查看帮助"
+	else
+		touch $1.in
+		touch $1.out
+		echo -e "成功创建文件 $1.in $1.out\n> ls"
+		ls --color=auto -F
+	fi
 else
-	echo "没有传入参数"
+	echo -e "\033[1;31m[ERROR]\033[0m 无传入参数"
+	echo -e "\tcreate --help 查看帮助"
+	false
 fi
