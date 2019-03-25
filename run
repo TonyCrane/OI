@@ -1,58 +1,69 @@
 #!/bin/bash
 
-read -p "请输入文件名(无后缀名) > " filename
-echo "读取源文件 : $filename.cpp"
-if [ ! -f "$filename.cpp" ] ; then
-	echo "C++文件不存在！"
-	exit
-fi
+hel="--help"
+if [ -n "$1" ]; then
+	if [[ $1 != $hel ]]; then
+		echo "读取源文件 : $1.cpp"
+		if [ ! -f "$1.cpp" ] ; then
+			echo "C++文件不存在！"
+			exit
+		fi
 
-echo "读取输入文件：$filename.in"
-if [ ! -f "$filename.in" ] ; then
-	echo "输入文件不存在！"
-	exit
-fi
+		echo "读取输入文件：$1.in"
+		if [ ! -f "$1.in" ] ; then
+			echo "输入文件不存在！"
+			exit
+		fi
 
-echo "读取输出文件：$filename.out"
-if [ ! -f "$filename.out" ] ; then
-	echo "输出文件不存在！"
-	exit
-fi
+		echo "读取输出文件：$1.out"
+		if [ ! -f "$1.out" ] ; then
+			echo "输出文件不存在！"
+			exit
+		fi
 
-echo -e "\n成功读取文件"
+		echo -e "\n成功读取文件"
 
-g++ -o $filename $filename.cpp
-if [ $? -ne 0 ] ; then
-	echo -e "\n\n编译错误！"
-	exit
-fi
-echo -e "\n编译成功\n"
+		g++ -o $1 $1.cpp
+		if [ $? -ne 0 ] ; then
+			echo -e "\n\n编译错误！"
+			exit
+		fi
+		echo -e "\n编译成功\n"
 
-./$filename < $filename.in > a.out
-diff --ignore-space-change --ignore-blank-lines $filename.out a.out
-if [ $? -ne 0 ] ; then
-	echo -e "\n\n输出结果错误！"
-	exit
-fi
+		./$1 < $1.in > a.out
+		diff --ignore-space-change --ignore-blank-lines $1.out a.out
+		if [ $? -ne 0 ] ; then
+			echo -e "\n\n输出结果错误！"
+			exit
+		fi
 
-cat a.out
-echo -e "\n\n样例通过，用时："
-/usr/bin/time -f "time: %U\n" ./$filename < $filename.in > a.out
+		cat a.out
+		echo -e "\n\n样例通过，用时："
+		/usr/bin/time -f "time: %U\n" ./$1 < $1.in > a.out
 
-y="y"
-read -p "是否使用gedit打开文件?(y/n) > " op1
-if [ $op1 = $y ] ; then
-	gedit $filename.cpp
-fi
+		y="y"
+		read -p "是否使用gedit打开文件?(y/n) > " op1
+		if [ $op1 = $y ] ; then
+			gedit $filename.cpp
+		fi
 
-read -p "是否整理文件?(y/n) > " op
-if [ $op = $y ] ; then
-	rm $filename
-	rm a.out
-	mv $filename.out outputs/
-	mv $filename.cpp codes/
-	mv $filename.in inputs/
-	echo "整理成功"
-	sleep 2s
-	clear
+		read -p "是否整理文件?(y/n) > " op
+		if [ $op = $y ] ; then
+			rm $1
+			rm a.out
+			mv $1.out outputs/
+			mv $1.cpp codes/
+			mv $1.in inputs/
+			echo "整理成功"
+			sleep 2s
+			clear
+		fi
+	else
+		echo -e "帮助:\n\t使用 run <filename> 来运行filename.cpp 并检查"
+		echo -e "\t使用 run --help 来查看帮助"
+	fi	
+else
+	echo -e "\033[1;31m[ERROR]\033[0m 无传入参数"
+	echo -e "\trun --help 查看帮助"
+	false
 fi
