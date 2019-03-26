@@ -44,7 +44,7 @@ if [ -n "$1" ]; then
 		y="y"
 		read -p "是否使用gedit打开文件?(y/n) > " op1
 		if [ $op1 = $y ] ; then
-			gedit $filename.cpp
+			gedit $1.cpp
 		fi
 
 		read -p "是否整理文件?(y/n) > " op
