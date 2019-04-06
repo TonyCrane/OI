@@ -29,7 +29,7 @@ void add(int u, int v, int c, int w) {
 }
 
 bool BellmanFord(int& flow, long long& cost) {
-	for (int i = 0; i < n; ++i) d[i] = inf;
+	for (int i = 1; i <= n; ++i) d[i] = inf;
 	memset(vis, 0, sizeof(vis));
 	d[s] = 0; vis[s] = 1; p[s] = 0; a[s] = inf;
 	queue<int> Q;
