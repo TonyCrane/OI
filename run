@@ -49,11 +49,12 @@ if [ -n "$1" ]; then
 
 		read -p "是否整理文件?(y/n) > " op
 		if [ $op = $y ] ; then
+			read -p "输入归档文件夹 > " fold
 			rm $1
 			rm a.out
-			mv $1.out outputs/
-			mv $1.cpp codes/
-			mv $1.in inputs/
+			mv $1.out $fold/outputs/
+			mv $1.cpp $fold/codes/
+			mv $1.in $fold/inputs/
 			echo "整理成功"
 			sleep 2s
 			clear
