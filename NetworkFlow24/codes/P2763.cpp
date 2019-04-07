@@ -91,17 +91,14 @@ int main() {
     int maxflow = MaxFlow(s, t);
     if (maxflow == sum) {
         for (int i = n + 1; i <= n + k; ++i) {
-            ansi = 0;
-            printf("%d: ", i - n);
-            for (int j = 0; j < G[i].size(); ++j) {
-                Edge& e = edges[G[i][j]];
-                if (e.flow == 0) ans[++ansi] = e.to;
-            }
-            for (int j = 1; j <= ansi; ++j) {
-                if (j == 1) printf("%d", ans[j]);
-                else printf(" %d", ans[j]);
-            }
-            printf("\n");
+			printf("%d: ", i - n);
+			for (int j = 0; j < G[i].size(); ++j) {
+				Edge& e = edges[G[i][j]];
+				if (e.cap == 0 && e.flow != 0) {
+					printf("%d ", e.to);
+				}
+			}
+			printf("\n");
         }
     } else {
         printf("No Solution!\n");

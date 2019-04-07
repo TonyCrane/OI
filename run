@@ -30,7 +30,7 @@ if [ -n "$1" ]; then
 		fi
 		echo -e "\n编译成功\n"
 
-		./$1.exe < $1.in > a.out
+		./$1 < $1.in > a.out
 		diff --ignore-space-change --ignore-blank-lines $1.out a.out
 		if [ $? -ne 0 ] ; then
 			echo -e "\n\n输出结果错误！"
@@ -39,7 +39,7 @@ if [ -n "$1" ]; then
 
 		cat a.out
 		echo -e "\n\n样例通过，用时："
-		/usr/bin/time -f "time: %U\n" ./$1.exe < $1.in > a.out
+		/usr/bin/time -f "time: %U\n" ./$1 < $1.in > a.out
 
 		y="y"
 		read -p "是否使用gedit打开文件?(y/n) > " op1
