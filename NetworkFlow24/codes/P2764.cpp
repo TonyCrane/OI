@@ -10,9 +10,9 @@ using namespace std;
 const int maxn = 1010;
 const int inf  = 0x3f3f3f3f;
 
-bool vis[maxn];
+bool vis[maxn], vst[maxn];
 int n, m, s, t;
-int d[maxn], cur[maxn];
+int d[maxn], cur[maxn], to[maxn];
 
 struct Edge {
 	int from, to, cap, flow;
@@ -56,6 +56,7 @@ int dfs(int x, int a) {
 	for (int& i = cur[x]; i < G[x].size(); ++i) {
 		Edge& e = edges[G[x][i]];
 		if (d[x] + 1 == d[e.to] && (f = dfs(e.to, min(a, e.cap - e.flow))) > 0) {
+			to[x] = e.to;
 			e.flow += f;
 			edges[G[x][i] ^ 1].flow -= f;
 			flow += f;
@@ -81,14 +82,23 @@ int main() {
 	for (int i = 1; i <= m; ++i) {
 		int u, v;
 		scanf("%d %d", &u, &v);
-		add(u, v, 1);
+		add(u, v + n, 1);
 	}
 	for (int i = 1; i <= n; ++i) add(s, i, 1);
 	for (int i = 1; i <= n; ++i) add(i + n, t, 1);
 	int ans = maxflow(s, t);
-	
-
-
-
-
+	for (int i = 1; i <= n; ++i) {
+		if (!vst[i]) {
+			int x = i; vst[x] = true;
+			printf("%d ", x);
+			while (to[x] && to[x] != t) {
+				x = to[x] - n;
+				printf("%d ", x);
+				vst[x] = true;
+			}
+			printf("\n");
+		}
+	}
+	printf("%d\n", n - ans);
+	return 0;
 }
