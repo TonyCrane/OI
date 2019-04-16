@@ -55,19 +55,19 @@ int dfs(int u, int fa) {
 		if (num >= m) break;
 	}
 	if (ln >= sn && !lh.empty()) return lh.top();
-	return now;
+	else return now;
 }
 
 bool check() {
 	num = 0;
 	dfs(1, 0);
 	if (num >= m) return true;
-	return false;
+	else return false;
 }
 
 int main() {
 	read(n); read(m); int all = 0;
-	for (int i = 1; i <= m; ++i) {
+	for (int i = 1; i < n; ++i) {
 		int u, v, w;
 		read(u); read(v); read(w);
 		add(u, v, w);
