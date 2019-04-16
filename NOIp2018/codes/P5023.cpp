@@ -25,6 +25,11 @@ int main() {
 	scanf("%d %d", &n, &m);
 	if (n > m) swap(n, m);
 	if (n == 1) printf("%lld\n", poww(2, m));
-	if (n == 2) printf("%lld\n", 4 * poww(3, m - 1));
+	else if (n == 2) printf("%lld\n", 4 * poww(3, m - 1) % mod);
+	else if (n == 3) printf("%lld\n", 112 * poww(3, m - 3) % mod);
+	else {
+		if (m == n) printf("%lld\n", ((83 * poww(8, n) % mod + 5 * poww(2, n + 7) % mod) * 190104168 % mod));
+		else printf("%lld\n", ((83 * poww(8, n) % mod + poww(2, n + 8)) * poww(3, m - n - 1) % mod * 570312504 % mod ));
+	}
 	return 0;
 }
