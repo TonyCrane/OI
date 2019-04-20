@@ -1,3 +1,9 @@
+/*************************************************************
+ *  > File Name        : UVa11796.cpp
+ *  > Author           : Tony
+ *  > Created Time     : 2019/04/20 17:16:30
+**************************************************************/
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -76,27 +82,58 @@ double PolygonArea(Point* p, int n) {
     }
     return area / 2;
 }
-struct Line {
-    Point p;
-    Vector v;
-    Line(Point p, Vector v): p(p), v(v) {}
-    Point point(double t) {
-        return p + v * t;
-    }
-    Line move(double d) {
-        return Line(p + Normal(v) * d, v);
-    }
-};
-struct Circle {
-    Point c;
-    double r;
-    Circle(Point c, double r): c(c), r(r) {}
-    Point point(double a) {
-        return Point(c.x + cos(a) * r, c.y + sin(a) * r);
-    }
-};
 
+Point read_point() {
+    double x, y;
+    scanf("%lf %lf", &x, &y);
+    return Point(x, y);
+}
+
+const int maxn = 60;
+const double inf = 1e9;
+
+int T, A, B, kase = 1;
+Point P[maxn], Q[maxn];
+double minn, maxx;
+
+void update(Point p, Point a, Point b) {
+    minn = min(minn, DistanceToSegment(p, a, b));
+    maxx = max(maxx, Length(p - a));
+    maxx = max(maxx, Length(p - b));
+}
 
 int main() {
-    return 0;
+    scanf("%d", &T);
+    while (T--) {
+        scanf("%d %d", &A, &B);
+        for (int i = 0; i < A; ++i) {
+            P[i] = read_point();
+        }
+        for (int i = 0; i < B; ++i) {
+            Q[i] = read_point();
+        }
+        double LenA = 0, LenB = 0;
+        for (int i = 0; i < A - 1; ++i) {
+            LenA += Length(P[i + 1] - P[i]);
+        }
+        for (int i = 0; i < B - 1; ++i) {
+            LenB += Length(Q[i + 1] - Q[i]);
+        }
+        int Sa = 0, Sb = 0;
+        Point Pa = P[0], Pb = Q[0];
+        minn = inf; maxx = -inf;
+        while (Sa < A - 1 && Sb < B - 1) {
+            double La = Length(P[Sa + 1] - Pa);
+            double Lb = Length(Q[Sb + 1] - Pb);
+            double t = min(La / LenA, Lb / LenB);
+            Vector Va = (P[Sa + 1] - Pa) / La * t * LenA;
+            Vector Vb = (Q[Sb + 1] - Pb) / Lb * t * LenB;
+            update(Pa, Pb, Pb + Vb - Va);
+            Pa = Pa + Va;
+            Pb = Pb + Vb;
+            if (Pa == P[Sa + 1]) Sa++;
+            if (Pb == Q[Sb + 1]) Sb++;
+        }
+        printf("Case %d: %.0lf\n", kase++, maxx - minn);
+    }
 }
