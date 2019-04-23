@@ -120,7 +120,7 @@ int GetCircleCircleIntersection(Circle C1, Circle C2, vector<Point>& sol) {
         return 0;
     }
     if (dcmp(C1.r + C2.r - d) < 0) return 0;
-    if (dcmp(fabs(C1.r - C2.r) - d) < 0) return 0;
+    if (dcmp(fabs(C1.r - C2.r) - d) > 0) return 0;
     double a = angle(C2.c - C1.c);
     double da = acos((C1.r * C1.r + d * d - C2.r * C2.r) / (2 * C1.r * d));
     Point p1 = C1.point(a - da), p2 = C1.point(a + da);

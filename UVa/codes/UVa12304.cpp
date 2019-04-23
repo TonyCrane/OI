@@ -20,10 +20,10 @@ struct Point {
     Point(double x = 0, double y = 0): x(x), y(y) {}
 };
 typedef Point Vector;
-Vector operator + (Vector a, Vector b) { return Vector(a.x + b.x, a.y + b.y); }
-Vector operator - (Vector a, Vector b) { return Vector(a.x - b.x, a.y - b.y); }
-Vector operator * (Vector a, double p) { return Vector(a.x * p, a.y * p); }
-Vector operator / (Vector a, double p) { return Vector(a.x / p, a.y / p); }
+Vector operator + (const Vector& a, const Vector& b) { return Vector(a.x + b.x, a.y + b.y); }
+Vector operator - (const Vector& a, const Vector& b) { return Vector(a.x - b.x, a.y - b.y); }
+Vector operator * (const Vector& a, double p) { return Vector(a.x * p, a.y * p); }
+Vector operator / (const Vector& a, double p) { return Vector(a.x / p, a.y / p); }
 bool operator < (const Point& a, const Point& b) {
     return a.x < b.x || (a.x == b.x && a.y < b.y);
 }
@@ -34,31 +34,31 @@ int dcmp(double x) {
 bool operator == (const Point& a, const Point& b) {
     return dcmp(a.x - b.x) == 0 && dcmp(a.y - b.y) == 0;
 }
-double Dot(Vector a, Vector b) { return a.x * b.x + a.y * b.y; }
-double Length(Vector a) { return sqrt(Dot(a, a)); }
-double Angle(Vector a, Vector b) { return acos(Dot(a, b) / Length(a) / Length(b)); }
-double Cross(Vector a, Vector b) { return a.x * b.y - a.y * b.x; }
-double Area2(Point a, Point b, Point c) { return Cross(b - a, c - a); }
-Vector Rotate(Vector a, double rad) {
+double Dot(const Vector& a, const Vector& b) { return a.x * b.x + a.y * b.y; }
+double Length(const Vector& a) { return sqrt(Dot(a, a)); }
+double Angle(const Vector& a, const Vector& b) { return acos(Dot(a, b) / Length(a) / Length(b)); }
+double Cross(const Vector& a, const Vector& b) { return a.x * b.y - a.y * b.x; }
+double Area2(const Point& a, const Point& b, const Point& c) { return Cross(b - a, c - a); }
+Vector Rotate(const Vector& a, double rad) {
     return Vector(a.x * cos(rad) - a.y * sin(rad), a.x * sin(rad) + a.y * cos(rad));
 }
-Vector Normal(Vector a) {
+Vector Normal(const Vector& a) {
     double L = Length(a);
     return Vector(-a.y / L, a.x / L);
 }
-Point GetLineIntersection(Point p, Vector v, Point q, Vector w) {
+Point GetLineIntersection(const Point& p, const Vector& v, const Point& q, const Vector& w) {
     Vector u = p - q;
     double t = Cross(w, u) / Cross(v, w);
     return p + v * t;
 }
-double angle(Vector v) {
+double angle(const Vector& v) {
     return atan2(v.y, v.x);
 }
-double DistanceToLine(Point p, Point a, Point b) {
+double DistanceToLine(const Point& p, const Point& a, const Point& b) {
     Vector v1 = b - a, v2 = p - a;
     return fabs(Cross(v1, v2)) / Length(v1);
 }
-double DistanceToSegment(Point p, Point a, Point b) {
+double DistanceToSegment(const Point& p, const Point& a, const Point& b) {
     if (a == b) return Length(p - a);
     Vector v1 = b - a, v2 = p - a, v3 = p - b;
     if (dcmp(Dot(v1, v2)) < 0) return Length(v2);
@@ -139,7 +139,7 @@ int GetCircleCircleIntersection(Circle C1, Circle C2, vector<Point>& sol) {
         return 0;
     }
     if (dcmp(C1.r + C2.r - d) < 0) return 0;
-    if (dcmp(fabs(C1.r - C2.r) - d) < 0) return 0;
+    if (dcmp(fabs(C1.r - C2.r) - d) > 0) return 0;
     double a = angle(C2.c - C1.c);
     double da = acos((C1.r * C1.r + d * d - C2.r * C2.r) / (2 * C1.r * d));
     Point p1 = C1.point(a - da), p2 = C1.point(a + da);
@@ -156,7 +156,7 @@ Circle CircumscribedCircle(Point p1, Point p2, Point p3) {
     double Cx = p3.x - p1.x, Cy = p3.y - p1.y;
     double D = 2 * (Bx * Cy - By * Cx);
     double cx = (Cy * (Bx * Bx + By * By) - By * (Cx * Cx + Cy * Cy)) / D + p1.x;
-    double cy = (Bx * (Cx * Cx + Cy * Cy) - Cy * (Bx * Bx + By * By)) / D + p1.y;
+    double cy = (Bx * (Cx * Cx + Cy * Cy) - Cx * (Bx * Bx + By * By)) / D + p1.y;
     Point p = Point(cx, cy);
     return Circle(p, Length(p1 - p));
 }
@@ -231,7 +231,7 @@ void print(Circle c) {
 }
 
 // Problem 3
-void print(const vector<double>& ans) {
+void print(vector<double> ans) {
     int n = ans.size();
     sort(ans.begin(), ans.end());
     printf("[");
@@ -245,7 +245,7 @@ void print(const vector<double>& ans) {
 }
 
 // Problem 4 5 6
-void print(const vector<Point>& ans) {
+void print(vector<Point> ans) {
     int n = ans.size();
     sort(ans.begin(), ans.end());
     printf("[");
@@ -293,4 +293,5 @@ int main() {
             print(CircleTangentToTwoDisjointCirclesWithRadius(Circle(Point(x1, Y1), r1), Circle(Point(x2, y2), r2), r));
         }
     }
+    return 0;
 }
