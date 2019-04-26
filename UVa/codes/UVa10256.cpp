@@ -73,7 +73,46 @@ int isPointInPolygon(Point p, Polygon poly) {
     return 0;
 }
 
+bool judge(vector<Point> p1, vector<Point> p2) {
+    int n1 = p1.size(), n2 = p2.size();
+    for (int i = 0; i < n1; ++i) {
+        if (isPointInPolygon(p1[i], p2)) {
+            return false;
+        }
+    }
+    for (int i = 0; i < n2; ++i) {
+        if (isPointInPolygon(p2[i], p1)) {
+            return false;
+        }
+    }
+    for (int i = 0; i < n1; ++i) {
+        for (int j = 0; j < n2; ++j) {
+            if (SegmentProperIntersection(p1[i], p1[(i + 1) % n1], p2[j], p2[(j + 1) % n2])) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 int main() {
-    
+    int n, m;
+    while (scanf("%d %d", &n, &m) == 2 && n > 0 && m > 0) {
+        vector<Point> p1, p2;
+        double x, y;
+        for (int i = 0; i < n; ++i) {
+            scanf("%lf %lf", &x, &y);
+            p1.push_back(Point(x, y));
+        }
+        for (int i = 0; i < m; ++i) {
+            scanf("%lf %lf", &x, &y);
+            p2.push_back(Point(x, y));
+        }
+        if (judge(ConvexHull(p1), ConvexHull(p2))) {
+            printf("Yes\n");
+        } else {
+            printf("No\n");
+        }
+    }
+    return 0;
 }
