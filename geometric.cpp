@@ -28,6 +28,7 @@ double Length(Vector a) { return sqrt(Dot(a, a)); }
 double Angle(Vector a, Vector b) { return acos(Dot(a, b) / Length(a) / Length(b)); }
 double Cross(Vector a, Vector b) { return a.x * b.y - a.y * b.x; }
 double Area2(Point a, Point b, Point c) { return Cross(b - a, c - a); }
+double Dist2(const Point& A, const Point& B) { return (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y); }
 Vector Rotate(Vector a, double rad) {
     return Vector(a.x * cos(rad) - a.y * sin(rad), a.x * sin(rad) + a.y * cos(rad));
 }
@@ -83,7 +84,12 @@ double PolygonArea(Point* p, int n) {
 struct Line {
     Point p;
     Vector v;
-    Line(Point p, Vector v): p(p), v(v) {}
+    double ang;
+    Line() {}
+    Line(Point p, Vector v): p(p), v(v) { ang = atan2(v.y, v.x); }
+    bool operator < (const Line& L) const {
+        return ang < L.ang;
+    }
     Point point(double t) {
         return p + v * t;
     }
@@ -99,6 +105,14 @@ struct Circle {
         return Point(c.x + cos(a) * r, c.y + sin(a) * r);
     }
 };
+bool OnLeft(Line L, Point p) {
+    return Cross(L.v, p - L.p) > 0;
+}
+Point GetLineIntersection(Line a, Line b) {
+    Vector u = a.p - b.p;
+    double t = Cross(b.v, u) / Cross(a.v, b.v);
+    return a.p + a.v * t;
+}
 int GetLineCircleIntersection(Line L, Circle C, double& t1, double& t2, vector<Point>& sol) {
     double a = L.v.x, b = L.p.x - C.c.x, c = L.v.y, d = L.p.y - C.c.y;
     double e = a * a + c * c, f = 2 * (a * b + c * d), g = b * b + d * d - C.r * C.r;
@@ -213,6 +227,64 @@ double PolygonArea(Polygon p) {
     for(int i = 1; i < n-1; i++)
         area += Cross(p[i] - p[0], p[i + 1] - p[0]);
     return area / 2;
+}
+int diameter2(vector<Point>& points) { //旋转卡壳
+    vector<Point> p = ConvexHull(points);
+    int n = p.size();
+    if (n == 1) return 0;
+    if (n == 2) return Dist2(p[0], p[1]);
+    p.push_back(p[0]);
+    int ans = 0;
+    for (int u = 0, v = 1; u < n; ++u) {
+        for(;;) {
+            int diff = Cross(p[u + 1] - p[u], p[v + 1] - p[v]);
+            if (diff <= 0) {
+                ans = max(ans, Dist2(p[u], p[v]));
+                if (diff == 0) ans = max(ans, Dist2(p[u], p[v + 1]));
+                break;
+            }
+            v = (v + 1) % n;
+        }
+    }
+    return ans;
+}
+Polygon CutPolygon(Polygon poly, Point A, Point B) {
+    Polygon newpoly;
+    int n = poly.size();
+    for (int i = 0; i < n; ++i) {
+        Point C = poly[i];
+        Point D = poly[(i + 1) % n];
+        if (dcmp(Cross(B - A, C - A)) >= 0) newpoly.push_back(C);
+        if (dcmp(Cross(B - A, C - D)) != 0) {
+            Point ip = GetLineIntersection(A, B - A, C, D - C);
+            if (OnSegment(ip, C, D)) newpoly.push_back(ip);
+        }
+    }
+    return newpoly;
+}
+vector<Point> HalfplaneIntersection(vector<Line> L) {
+    int n = L.size();
+    sort(L.begin(), L.end());
+    int first, last;
+    vector<Point> p(n);
+    vector<Line>  q(n);
+    vector<Point> ans;
+    q[first = last = 0] = L[0];
+    for (int i = 1; i < n; i++) {
+        while (first < last && !OnLeft(L[i], p[last - 1])) last--;
+        while (first < last && !OnLeft(L[i], p[first]))   first++;
+        q[++last] = L[i];
+        if (fabs(Cross(q[last].v, q[last - 1].v)) < eps) {
+            last--;
+            if (OnLeft(q[last], L[i].p)) q[last] = L[i];
+        }
+        if (first < last) p[last - 1] = GetLineIntersection(q[last - 1], q[last]);
+    }
+    while (first < last && !OnLeft(q[first], p[last - 1])) last--;
+    if (last - first <= 1) return ans;
+    p[last] = GetLineIntersection(q[last], q[first]);
+    for (int i = first; i <= last; i++) ans.push_back(p[i]);
+    return ans;
 }
 
 int main() {
