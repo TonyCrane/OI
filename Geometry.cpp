@@ -272,3 +272,185 @@ int GetCircleCircleIntersection(Circle C1, Circle C2, vector<Point>& sol) {
     sol.push_back(p2);
     return 2;
 }
+
+/**
+ * @brief 求切线
+ * @param[in]   p   点
+ * @param[in]   C   圆
+ * @param[out]  *v  切线
+ * @return 切线条数
+ */
+int getTangents(Point p, Circle C, Vector* v) {
+    Vector u = C.c - p;
+    double dist = Length(u);
+    if (dist < C.r) return 0;
+    else if (dcmp(dist - C.r) == 0) {
+        v[0] = Rotate(u, PI / 2);
+        return 1;
+    } else {
+        double ang = asin(C.r / dist);
+        v[0] = Rotate(u, -ang);
+        v[1] = Rotate(u, +ang);
+        return 2;
+    }
+}
+
+/**
+ * @brief 两圆公切线
+ * @param[in]   A,B    两圆
+ * @param[out]  *a,*b  切点
+ * @return 公切线条数
+ */
+int getTangents(Circle A, Circle B, Point* a, Point* b) {
+    int cnt = 0;
+    if (A.r - B.r) { swap(A, B); swap(a, b); }
+    int d2 = (A.c.x - B.c.x) * (A.c.x - B.c.x) + (A.c.y - B.c.y) * (A.c.y - B.c.y);
+    int rdiff = A.r - B.r;
+    int rsum  = A.r + B.r;
+    if (d2 < rdiff * rdiff) return 0;
+    double base = atan2(B.c.y - A.c.y, B.c.x - A.c.x);
+    if (d2 == 0 && A.r == B.r) return -1;
+    if (d2 == rdiff * rdiff) {
+        a[cnt] = A.point(base);
+        b[cnt] = B.point(base);
+        cnt++;
+        return 1;
+    }
+    double ang = acos((A.r - B.r) / sqrt(d2));
+    a[cnt] = A.point(base + ang); b[cnt] = B.point(base + ang); cnt++;
+    a[cnt] = A.point(base - ang); b[cnt] = B.point(base - ang); cnt++;
+    if (d2 == rsum * rsum) {
+        a[cnt] = A.point(base);
+        b[cnt] = B.point(PI + base);
+        cnt++;
+    } else if (d2 > rsum * rsum) {
+        double ang = acos((A.r + B.r) / sqrt(d2));
+        a[cnt] = A.point(base + ang); b[cnt] = B.point(PI + base + ang); cnt++;
+        a[cnt] = A.point(base - ang); b[cnt] = B.point(PI + base - ang); cnt++;
+    }
+    return cnt;
+}
+
+typedef vector<Point> Polygon;
+/**
+ * @brief 判定点在多边形内
+ * @param[in]  p     点
+ * @param[in]  poly  多边形
+ * @return 是否在多边形内(在1,不在0,在边上-1)
+ */
+int isPointInPolygon(Point p, Polygon poly) {
+    int wn = 0;
+    int n = poly.size();
+    for (int i = 0; i < n; ++i) {
+        if (OnSegment(p, poly[i], poly[(i + 1) % n])) return -1;
+        int k = dcmp(Cross(poly[(i + 1) % n] - poly[i], p - poly[i]));
+        int d1 = dcmp(poly[i].y - p.y);
+        int d2 = dcmp(poly[(i + 1) % n].y - p.y);
+        if (k > 0 && d1 <= 0 && d2 > 0) wn++;
+        if (k < 0 && d2 <= 0 && d1 > 0) wn--;
+    }
+    if (wn != 0) return 1;
+    return 0;
+}
+
+/**
+ * @brief 凸包
+ * @param[in]  p  点集
+ * @return 凸包多边形
+ */
+Polygon ConvexHull(vector<Point> p) {
+    sort(p.begin(), p.end());
+    p.erase(unique(p.begin(), p.end()), p.end());
+    int n = p.size();
+    int m = 0;
+    Polygon ch(n + 1);
+    for (int i = 0; i < n; ++i) {
+        while (m > 1 && Cross(ch[m - 1] - ch[m - 2], p[i] - ch[m - 2]) <= 0) m--;
+        ch[m++] = p[i];
+    }
+    int k = m;
+    for (int i = n - 2; i >= 0; --i) {
+        while (m > k && Cross(ch[m - 1] - ch[m - 2], p[i] - ch[m - 2]) <= 0) m--;
+        ch[m++] = p[i];
+    }
+    if (n > 1) m--;
+    ch.resize(m);
+    return ch;
+}
+
+/**
+ * @brief 旋转卡壳
+ * @param[in]  points  点集
+ * @return 直径
+ */
+int diameter2(vector<Point>& points) { //旋转卡壳
+    vector<Point> p = ConvexHull(points);
+    int n = p.size();
+    if (n == 1) return 0;
+    if (n == 2) return Dist2(p[0], p[1]);
+    p.push_back(p[0]);
+    int ans = 0;
+    for (int u = 0, v = 1; u < n; ++u) {
+        for(;;) {
+            int diff = Cross(p[u + 1] - p[u], p[v + 1] - p[v]);
+            if (diff <= 0) {
+                ans = max(ans, Dist2(p[u], p[v]));
+                if (diff == 0) ans = max(ans, Dist2(p[u], p[v + 1]));
+                break;
+            }
+            v = (v + 1) % n;
+        }
+    }
+    return ans;
+}
+
+/**
+ * @brief 切多边形
+ * @param[in]  poly  多边形
+ * @param[in]  A,B   直线上两点
+ * @return 新多边形
+ */
+Polygon CutPolygon(Polygon poly, Point A, Point B) {
+    Polygon newpoly;
+    int n = poly.size();
+    for (int i = 0; i < n; ++i) {
+        Point C = poly[i];
+        Point D = poly[(i + 1) % n];
+        if (dcmp(Cross(B - A, C - A)) >= 0) newpoly.push_back(C);
+        if (dcmp(Cross(B - A, C - D)) != 0) {
+            Point ip = GetLineIntersection(A, B - A, C, D - C);
+            if (OnSegment(ip, C, D)) newpoly.push_back(ip);
+        }
+    }
+    return newpoly;
+}
+
+/**
+ * @brief 半平面交
+ * @param[in]  L  直线集
+ * @return 多边形
+ */
+vector<Point> HalfplaneIntersection(vector<Line> L) {
+    int n = L.size();
+    sort(L.begin(), L.end());
+    int first, last;
+    vector<Point> p(n);
+    vector<Line>  q(n);
+    vector<Point> ans;
+    q[first = last = 0] = L[0];
+    for (int i = 1; i < n; i++) {
+        while (first < last && !OnLeft(L[i], p[last - 1])) last--;
+        while (first < last && !OnLeft(L[i], p[first]))   first++;
+        q[++last] = L[i];
+        if (fabs(Cross(q[last].v, q[last - 1].v)) < eps) {
+            last--;
+            if (OnLeft(q[last], L[i].p)) q[last] = L[i];
+        }
+        if (first < last) p[last - 1] = GetLineIntersection(q[last - 1], q[last]);
+    }
+    while (first < last && !OnLeft(q[first], p[last - 1])) last--;
+    if (last - first <= 1) return ans;
+    p[last] = GetLineIntersection(q[last], q[first]);
+    for (int i = first; i <= last; i++) ans.push_back(p[i]);
+    return ans;
+}
