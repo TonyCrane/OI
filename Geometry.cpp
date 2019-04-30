@@ -394,8 +394,8 @@ int diameter2(vector<Point>& points) { //旋转卡壳
         for(;;) {
             int diff = Cross(p[u + 1] - p[u], p[v + 1] - p[v]);
             if (diff <= 0) {
-                ans = max(ans, Dist2(p[u], p[v]));
-                if (diff == 0) ans = max(ans, Dist2(p[u], p[v + 1]));
+                ans = max(ans, (int)Dist2(p[u], p[v]));
+                if (diff == 0) ans = max(ans, (int)Dist2(p[u], p[v + 1]));
                 break;
             }
             v = (v + 1) % n;
