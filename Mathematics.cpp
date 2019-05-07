@@ -61,6 +61,7 @@ LL mul_mod(LL a, LL b, int n) {
  * @return a^p mod n
  */
 LL pow_mod(LL a, LL p, LL n) {
+    if (p == 0 && n == 1) return 0;
     if (p == 0) return 1;
     LL ans = pow_mod(a, p / 2, n); ans = ans * ans % n;
     if (p % 2 == 1) ans = ans * a % n;
@@ -104,4 +105,16 @@ LL inv(LL a, LL n) {
     LL d, x, y;
     exgcd(a, n, d, x, y);
     return d == 1 ? (x + n) % n : -1;
+}
+
+/**
+ * @brief 生成逆元表
+ * @param[in]  n
+ */
+int inv_table[maxn];
+void getinv(int n, int p) {
+    inv_table[1] = 1;
+    for (int i = 2; i <= n; ++i) {
+        inv_table[i] = (LL)(p - p / i) * inv_table[p % i] % p;
+    }
 }
