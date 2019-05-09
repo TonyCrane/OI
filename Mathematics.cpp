@@ -51,8 +51,14 @@ void getprime(int n) {
  * @param[in]  a,b,n
  * @return ab mod n
  */
-LL mul_mod(LL a, LL b, int n) {
-    a %= n; b %= n; return a * b % n;
+LL mul_mod(LL a, LL b, LL n){
+    LL res = 0;
+    while (b > 0) {
+        if (b & 1) res = (res + a) % n;
+        a = (a + a) % n;
+        b >>= 1;
+    }
+    return res;
 }
 
 /**
@@ -133,6 +139,25 @@ LL crt(int n, int* a, int* m) {
         x = (x + y * w * a[i]) % M;
     }
     return (x + M) % M;
+}
+
+/**
+ * @brief 扩展中国剩余定理(m不两两互质)
+ * @param[in]  n,*a,*m
+ * @return 同余方程组x≡a[i] (mod m[i])的解
+ */
+LL excrt(LL n, LL* a, LL* m) {
+    LL x, y, k, M = m[0], ans = a[0];
+    for (int i = 1; i < n; ++i) {
+        LL A = M, B = m[i], C = (a[i] - ans % B + B) % B, gcd;
+        exgcd(A, B, gcd, x, y);
+        LL bg = B / gcd;
+        if (C % gcd != 0) return -1;
+        x = mul_mod(x, C / gcd, bg);
+        ans += x * M; M *= bg;
+        ans = (ans % M + M) % M;
+    }
+    return (ans % M + M) % M;
 }
 
 /**
