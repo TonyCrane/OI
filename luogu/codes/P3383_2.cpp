@@ -16,6 +16,7 @@ int prime[maxn];
 void getprime(int n) {
     int m = (int)sqrt(n + 0.5), num = 0;
     memset(vis, 0, sizeof(vis));
+    vis[0] = vis[1] = 1;
     for (int i = 2; i <= m; ++i) if (!vis[i]) {
         prime[++num] = i;
         for (int j = i * i; j <= n; j += i) vis[j] = 1;

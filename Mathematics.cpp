@@ -40,6 +40,7 @@ int prime[maxn];
 void getprime(int n) {
     int m = (int)sqrt(n + 0.5), num = 0;
     memset(vis, 0, sizeof(vis));
+    vis[0] = vis[1] = 1;
     for (int i = 2; i <= m; ++i) if (!vis[i]) {
         prime[++num] = i;
         for (int j = i * i; j <= n; j += i) vis[j] = 1;
@@ -73,10 +74,15 @@ LL pow_mod(LL a, LL p, LL n) {
     if (p % 2 == 1) ans = ans * a % n;
     return ans;
 }
+LL pow_mod(LL a, LL p, LL n) { //位运算
+    a %= n; LL ans = 1;
+    for (; p; p >>= 1, a *= a, a %= n) if(p & 1) ans = ans * a % n;
+    return ans;
+}
 
 /**
  * @brief 欧拉φ函数
- * @param[in]  n  终止值
+ * @param[in]  n
  * @return φ(n)
  */
 int euler_phi(int n) {
@@ -86,6 +92,7 @@ int euler_phi(int n) {
         while (n % i == 0) n /= i;
     }
     if (n > 1) ans = ans / n * (n - 1);
+    return ans;
 }
 
 /**
