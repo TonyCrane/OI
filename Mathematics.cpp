@@ -188,3 +188,18 @@ int log_mod(int a, int b, int n) {
     }
     return -1;
 }
+
+/**
+ * @brief 整除分块(∑_{i=1}^n{k mod i})
+ * @param[in]  n,k
+ */
+void block(LL n, LL k) {
+    LL ans = 0;
+    for (long long l = 1, r, t; l <= n; l = r + 1) {
+        t = k / l;
+        if (t) r = min(k / t, n);
+        else r = n;
+        ans += t * (r - l + 1) * (l + r) / 2;
+    }
+    printf("%lld\n", n * k - ans);
+}
