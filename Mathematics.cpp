@@ -203,3 +203,23 @@ void block(LL n, LL k) {
     }
     printf("%lld\n", n * k - ans);
 }
+
+/**
+ * @brief 线性筛莫比乌斯函数
+ * @param[in]  n
+ */
+int mu[maxn], vis[maxn];
+int primes[maxn], cnt;
+void get_mu(int n) {
+	memset(vis, 0, sizeof(vis));
+	memset(mu, 0, sizeof(mu));
+	cnt = 0; mu[1] = 1;
+	for (int i = 2; i <= n; ++i) {
+		if (!vis[i]) { primes[cnt++] = i; mu[i] = -1; }
+		for (int j = 0; j < cnt && primes[j] * i <= n; ++j) {
+			vis[primes[j] * i] = 1;
+			if (i % primes[j] == 0)break;
+			mu[i * primes[j]] = -mu[i];
+		}
+	}
+}
