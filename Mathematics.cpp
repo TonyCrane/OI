@@ -223,3 +223,27 @@ void get_mu(int n) {
 		}
 	}
 }
+
+/**
+ * @brief Miller-Rabin素数测试
+ * @param[in]  n
+ * @return bool值(是否为素数)
+ */
+LL Random(LL n) { return (LL)((double)rand() / RAND_MAX * n + 0.5); }
+bool Witness(LL a, LL n) {
+    LL m = n - 1; int j = 0;
+    while (!(m & 1)) { j++; m >>= 1; }
+    LL x = pow_mod(a, m, n);
+    if (x == 1 || x == n - 1) return false;
+    while (j--) { x = x * x % n; if (x == n - 1) return false; }
+    return true;
+}
+bool Miller_Rabin(LL n) {
+    if (n < 2) return false; if (n == 2) return true;
+    if (!(n & 1)) return false;
+    for (int i = 1; i <= 30; ++i) {
+        LL a = Random(n - 2) + 1;
+        if (Witness(a, n)) return false;
+    }
+    return true;
+}
