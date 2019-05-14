@@ -247,3 +247,36 @@ bool Miller_Rabin(LL n) {
     }
     return true;
 }
+
+/**
+ * @brief Rollard-Rho算法
+ * @param[in]   n
+ * @param[out]  maxx  最大质因子
+ * @param[out]  mini  最小质因子
+ */
+LL maxx, mini;
+LL vis[510];
+LL Pollard_Rho(LL n, int c) {
+    LL x, y, d, i = 1, k = 2;
+    x = Random(n - 1) + 1; y = x;
+    while (true) {
+        i++;
+        x = (mul_mod(x, x, n) + c) % n;
+        d = gcd(y - x, n);
+        if (1 < d && d < n) return d;
+        if (y == x) return n;
+        if (i == k) { y = x; k <<= 1; }
+    }
+}
+void find(LL n, int k) {
+    if (n == 1) return;
+    if (Miller_Rabin(n)) {
+        vis[++cnt] = n;
+        if (n > maxx) maxx = n;
+        if (n < mini) mini = n;
+        return;
+    }
+    LL p = n;
+    while (p >= n) p = Pollard_Rho(p, k--);
+    find(p, k); find(n / p, k);
+}
