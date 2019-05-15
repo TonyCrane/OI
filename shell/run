@@ -42,10 +42,10 @@ if [ -n "$1" ]; then
 		/usr/bin/time -f "time: %U\n" ./$1 < $1.in > a.out
 
 		y="y"
-		read -p "是否使用gedit打开文件?(y/n) > " op1
-		if [ $op1 = $y ] ; then
-			gedit $1.cpp
-		fi
+		# read -p "是否使用gedit打开文件?(y/n) > " op1
+		# if [ $op1 = $y ] ; then
+		# 	gedit $1.cpp
+		# fi
 
 		read -p "是否整理文件?(y/n) > " op
 		if [ $op = $y ] ; then

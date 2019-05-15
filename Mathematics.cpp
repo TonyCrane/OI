@@ -76,7 +76,8 @@ LL pow_mod(LL a, LL p, LL n) {
 }
 LL pow_mod(LL a, LL p, LL n) { //位运算
     a %= n; LL ans = 1;
-    for (; p; p >>= 1, a *= a, a %= n) if(p & 1) ans = ans * a % n;
+    for (; p; p >>= 1, a *= a, a %= n)
+        if(p & 1) ans = ans * a % n;
     return ans;
 }
 
