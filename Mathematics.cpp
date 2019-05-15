@@ -280,3 +280,22 @@ void find(LL n, int k) {
     while (p >= n) p = Pollard_Rho(p, k--);
     find(p, k); find(n / p, k);
 }
+
+/**
+ * @brief Lucas定理
+ * @param[in]  n,m,p
+ * @return C(n,m) mod p
+ */
+LL c[maxn]; int p;
+LL C(LL a, LL b) {
+    if (a < b) return 0;
+    return ((c[a] * pow_mod(c[b], p - 2, p)) % p * pow_mod(c[a - b], p - 2, p) % p);
+}
+LL Lucas(LL n, LL m) {
+    if (m == 0) return 1;
+    return C(n % p, m % p) * Lucas(n / p, m / p) % p;
+}
+void getc(int p) {
+    c[0] = 1;
+    for (int i = 1; i <= p; ++i) c[i] = (c[i - 1] * i) % p;
+}
