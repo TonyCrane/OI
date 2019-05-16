@@ -300,3 +300,90 @@ void getc(int p) {
     c[0] = 1;
     for (int i = 1; i <= p; ++i) c[i] = (c[i - 1] * i) % p;
 }
+
+/**
+ * @brief 扩展Lucas定理
+ * @param[in]  n,m,p
+ * @return C(n, m) mod p
+ */
+
+LL a[maxn], c[maxn], n, m, p, cnt;
+inline LL crt(){
+    LL M = 1, ans = 0;
+    for (int i = 0; i < cnt; ++i) M *= c[i];
+    for (int i = 0; i < cnt; ++i) {
+        ans = (ans + a[i] * (M / c[i]) % M * inv(M / c[i], c[i]) % M) % M;
+    }
+    return ans;
+}
+LL fac(LL n, LL p, LL pk) {
+    if (!n) return 1; LL ans = 1;
+    for (int i = 1; i < pk; ++i)
+        if (i % p) ans = ans * i % pk;
+    ans = pow_mod(ans, n / pk, pk);
+    for (int i = 1; i <= n % pk; ++i)
+        if (i % p) ans = ans * i % pk;
+    return ans * fac(n / p, p, pk) % pk;
+}
+LL C(LL n, LL m, LL p, LL pk) {
+    if (n < m) return 0;
+    LL N = fac(n, p, pk), M = fac(m, p, pk), Z = fac(n - m, p, pk), cnt = 0;
+    for (LL i = n; i; i /= p) cnt += i / p;
+    for (LL i = m; i; i /= p) cnt -= i / p;
+    for (LL i = n - m; i; i /= p) cnt -= i / p;
+    return N * inv(M, pk) % pk * inv(Z, pk) % pk * pow_mod(p, cnt, pk) % pk;
+}
+LL exLucas(LL n, LL m, LL p) {
+    LL tmp = sqrt(p);
+    for (int i = 2; p > 1 && i <= tmp; ++i) {
+        LL tmp = 1;
+        while (p % i == 0) p /= i, tmp *= i;
+        if (tmp > 1) c[cnt] = tmp, a[cnt++] = C(n, m, i, tmp);
+    }
+    if (p > 1) c[cnt] = p, a[cnt++] = C(n, m, p, p);
+    return crt();
+}
+
+/**
+ * @brief 杜教筛
+ * @param[in]  n
+ * @return ∑_{i=1}^n{φ(i)} ∑_{i=1}^n{μ(i)}
+ */
+#include <tr1/unordered_map>
+tr1::unordered_map<int, LL> Smu, Sphi;
+int primes[maxn], cnt;
+LL mu[maxn], phi[maxn];
+bool vis[maxn];
+void get() {
+    mu[1] = 1; phi[1] = 1;
+    for (int i = 2; i <= maxn - 10; ++i) {
+        if (!vis[i]) { primes[++cnt] = i; mu[i] = -1; phi[i] = i - 1; }
+        for (int j = 1; j <= cnt && i * primes[j] <= maxn - 10; ++j) {
+            vis[i * primes[j]] = 1;
+            if (i % primes[j] == 0) { phi[i * primes[j]] = phi[i] * primes[j]; break; }
+            else mu[i * primes[j]] = -mu[i], phi[i * primes[j]] = phi[i] * phi[primes[j]];
+        }
+    }
+    for (int i = 1; i <= maxn - 10; ++i) {
+        mu[i] += mu[i - 1];
+        phi[i] += phi[i - 1];
+    }
+}
+LL djsmu(int n) {
+    if (n <= maxn - 10) return mu[n];
+    if (Smu[n]) return Smu[n];
+    LL res = 1LL;
+    for (int l = 2, r; l <= n; l = r + 1) {
+        r = n / (n / l); res -= (r - l + 1) * djsmu(n / l);
+    }
+    return Smu[n] = res;
+}
+LL djsphi(int n) {
+    if (n <= maxn - 10) return phi[n];
+    if (Sphi[n]) return Sphi[n];
+    LL res = (1LL + n) * n / 2;
+    for (int l = 2, r; l <= n; l = r + 1) {
+        r = n / (n / l); res -= (r - l + 1) * djsphi(n / l);
+    }
+    return Sphi[n] = res;
+}
