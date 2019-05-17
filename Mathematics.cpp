@@ -387,3 +387,123 @@ LL djsphi(int n) {
     }
     return Sphi[n] = res;
 }
+
+/**
+ * @brief 矩阵乘法
+ * @param[in]   A,B
+ * @param[out]  res  A*B mod mod
+ */
+typedef long long Matrix[maxn][maxn];
+int sz, mod;
+void matrix_mul(Matrix A, Matrix B, Matrix res) {
+    Matrix C;
+    memset(C, 0, sizeof(C));
+    for (int i = 0; i < sz; ++i) {
+        for (int j = 0; j < sz; ++j) {
+            for (int k = 0; k < sz; ++k) {
+                C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % mod;
+            }
+        }
+    }
+    memcpy(res, C, sizeof(C));
+}
+
+/**
+ * @brief 矩阵快速幂
+ * @param[in]   A,n
+ * @param[out]  res  A^n mod mod
+ */
+void matrix_pow(Matrix A, int n, Matrix res) {
+    Matrix a, r;
+    memcpy(a, A, sizeof(a));
+    memset(r, 0, sizeof(r));
+    for (int i = 0; i < sz; ++i) r[i][i] = 1;
+    while (n) {
+        if (n & 1) matrix_mul(r, a, r);
+        n >>= 1;
+        matrix_mul(a, a, a);
+    }
+    memcpy(res, r, sizeof(r));
+}
+
+/**
+ * @brief 矩阵乘列向量
+ * @param[in]   d,A
+ * @param[out]  res  A*d mod mod
+ */
+typedef long long Vector[maxn];
+void transform(Vector d, Matrix A, Vector res) {
+    Vector r;
+    memset(r, 0, sizeof(r));
+    for (int i = 0; i < sz; ++i) {
+        for (int j = 0; j < sz; ++j) {
+            r[j] = (r[j] + d[i] * A[i][j]) % mod;
+        }
+    }
+    memcpy(res, r, sizeof(r));
+}
+
+/**
+ * @brief 高斯消元法
+ * @param[in]  A,n
+ */
+const double eps = 1e-8;
+void Gauss(double** A, int n) {
+    int r;
+    for (int i = 0; i < n; ++i) {
+        r = i;
+        for (int j = i + 1; j < n; ++j) {
+            if (fabs(A[j][i]) > fabs(A[r][i])) r = j;
+        }
+        if (fabs(A[r][i]) < eps) {
+            printf("No Solution\n");
+            exit(0);
+        }
+        if (r != i) {
+            for (int j = 0; j <= n; ++j) {
+                swap(A[r][j], A[i][j]);
+            }
+        }
+        for (int k = i + 1; k < n; ++k) {
+            double f = A[k][i] / A[i][i];
+            for (int j = i; j <= n; ++j) {
+                A[k][j] -= f * A[i][j];
+            }
+        }
+    }
+    for (int i = n - 1; i >= 0; --i) {
+        for (int j = i + 1; j < n; ++j) {
+            A[i][n] -= A[j][n] * A[i][j];
+        }
+        A[i][n] /= A[i][i];
+    }
+}
+
+/**
+ * @brief 高斯-约当消元法
+ * @param[in]  A,n
+ */
+void Gauss_jordan(double** A, int n) {
+    int r;
+    for (int i = 0; i < n; i++) {
+        r = i;
+        for (int j = i + 1; j < n; j++)
+            if (fabs(A[j][i]) > fabs(A[r][i])) r = j;
+        if (fabs(A[r][i]) < eps) {
+            printf("No Solution\n");
+            exit(0);
+        }
+        if (r != i) {
+            for (int j = 0; j <= n; j++) {
+                swap(A[r][j], A[i][j]);
+            }
+        }
+        for (int k = 0; k < n; k++) {
+            if (k != i) {
+                for (int j = n; j >= i; j--) {
+                    A[k][j] -= A[k][i] / A[i][i] * A[i][j];
+                }
+            }
+        }
+    }
+}
