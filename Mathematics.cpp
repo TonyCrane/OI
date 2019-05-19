@@ -507,3 +507,38 @@ void Gauss_jordan(double** A, int n) {
         }
     }
 }
+
+/**
+ * @brief 矩阵求逆
+ * @param[in]  a
+ */
+int n, is[410], js[410];
+void inv(LL** a) {
+    for (int k = 1; k <= n; ++k) {
+        for (int i = k; i <= n; ++i) {
+            for (int j = k; j <= n; ++j) {
+                if (a[i][j]) {
+                    is[k] = i; js[k] = j; break;
+                }
+            }
+        }
+        for (int i = 1; i <= n; ++i) swap(a[k][i], a[is[k]][i]);
+        for (int i = 1; i <= n; ++i) swap(a[i][k], a[i][js[k]]);
+        if (!a[k][k]) {
+            printf("No Solution\n");
+            exit(0);
+        }
+        a[k][k] = inv(a[k][k], mod);
+        for (int j = 1; j <= n; ++j)
+            if (j != k) (a[k][j] *= a[k][k]) %= mod;
+        for (int i = 1; i <= n; ++i)
+            if (i != k) for (int j = 1; j <= n; ++j)
+                if (j != k) (a[i][j] += mod - a[i][k] * a[k][j] % mod) %= mod;
+        for (int i = 1; i <= n; ++i) 
+            if (i != k) a[i][k] = (mod - a[i][k] * a[k][k] % mod) % mod;
+    }
+    for (int k = n; k; --k) {
+        for (int i = 1; i <= n; ++i) swap(a[js[k]][i], a[k][i]);
+        for (int i = 1; i <= n; ++i) swap(a[i][is[k]], a[i][k]);
+    }
+}
