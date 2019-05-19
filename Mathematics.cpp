@@ -11,6 +11,13 @@ using namespace std;
 typedef long long LL;
 const int maxn = 100010;
 
+inline int read() {
+    int x = 0, f = 1; char ch = getchar();
+    while (!isdigit(ch)) {if (ch == '-') f = -1; ch = getchar();}
+    while (isdigit(ch))  {x = x * 10 + ch - 48; ch = getchar();}
+    return x * f;
+}
+
 /**
  * @brief 欧几里得算法
  * @param[in]  a,b
@@ -67,18 +74,14 @@ LL mul_mod(LL a, LL b, LL n){
  * @param[in]  a,p,n
  * @return a^p mod n
  */
-LL pow_mod(LL a, LL p, LL n) {
-    if (p == 0 && n == 1) return 0;
-    if (p == 0) return 1;
-    LL ans = pow_mod(a, p / 2, n); ans = ans * ans % n;
-    if (p % 2 == 1) ans = ans * a % n;
-    return ans;
-}
-LL pow_mod(LL a, LL p, LL n) { //位运算
-    a %= n; LL ans = 1;
-    for (; p; p >>= 1, a *= a, a %= n)
-        if(p & 1) ans = ans * a % n;
-    return ans;
+LL pow_mod(LL a, LL p, LL n){
+    int res = 1;
+    while (p) {
+        if (p & 1) res = 1LL * res * a % n;
+        a = 1LL * a * a % n;
+        p >>= 1;
+    }
+    return res;
 }
 
 /**
@@ -541,4 +544,27 @@ void inv(LL** a) {
         for (int i = 1; i <= n; ++i) swap(a[js[k]][i], a[k][i]);
         for (int i = 1; i <= n; ++i) swap(a[i][is[k]], a[i][k]);
     }
+}
+
+/**
+ * @brief 拉格朗日插值
+ * @param[in]  
+ * @return 
+ */
+void Lagrange() {
+    int n = read(), k = read(), x[2010], y[2010];
+    for (int i = 1; i <= n; ++i) {
+        x[i] = read(); y[i] = read();
+    }
+    int ans = 0;
+    for (int i = 1; i <= n; ++i) {
+        int cnt = 1;
+        for (int j = 1; j <= n; ++j) {
+            if (j != i) {
+                cnt = (1LL * cnt * (k - x[j]) % p * inv(x[i] - x[j], p)) % p;
+            }
+        }
+        ans = (ans + 1LL * cnt * y[i] % p) % p;
+    }
+    printf("%d\n", (ans + p) % p);
 }
