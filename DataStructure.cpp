@@ -17,7 +17,7 @@ const int maxn = 10010;
 int bit[maxn], n, m;
 int lowbit(int k) { return k & -k; }
 void add(int x, int k) {
-    while (x <= n) {
+    while (x <= maxn) {
         bit[x] += k;
         x += lowbit(x);
     }
