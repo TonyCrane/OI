@@ -8,7 +8,13 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-
+typedef long long LL;
+inline int read() {
+    int x = 0; int f = 1; char ch = getchar();
+    while (!isdigit(ch)) {if (ch == '-') f = -1; ch = getchar();}
+    while (isdigit(ch))  {x = x * 10 + ch - 48; ch = getchar();}
+    return x * f;
+}
 const int maxn = 10010;
 const int inf  = 0x3f3f3f3f;
 
@@ -84,6 +90,115 @@ struct SegmentTree {
         if (l <= mid) ans += query(p * 2, l, r);
         if (r >  mid) ans += query(p * 2 + 1, l, r);
         return ans;
+    }
+    #undef add
+    #undef sum
+    #undef l
+    #undef r
+};
+
+/**
+ * @brief 分块
+ */
+struct Block {
+    LL a[maxn], sum[maxn], add[maxn];
+    int L[maxn], R[maxn];
+    int pos[maxn];
+    int n, m, t;
+    void change(int l, int r, LL d) {
+    	int p = pos[l], q = pos[r];
+    	if (p == q) {
+    		for (int i = l; i <= r; ++i) a[i] += d;
+    		sum[p] += d * (r - l + 1);
+    	} else {
+    		for (int i = p + 1; i <= q - 1; ++i) add[i] += d;
+    		for (int i = l; i <= R[p]; ++i) a[i] += d;
+    		sum[p] += d * (R[p] - l + 1);
+    		for (int i = L[q]; i <= r; ++i) a[i] += d;
+    		sum[q] += d * (r - L[q] + 1);
+    	}
+    }
+    LL query(int l, int r) {
+    	int p = pos[l], q = pos[r];
+    	LL ans = 0;
+    	if (p == q) {
+    		for (int i = l; i <= r; ++i) ans += a[i];
+    		ans += add[p] * (r - l + 1);
+    	} else {
+    		for (int i = p + 1; i <= q - 1; ++i) ans += sum[i] + add[i] * (R[i] - L[i] + 1);
+    		for (int i = l; i <= R[p]; ++i) ans += a[i];
+    		ans += add[p] * (R[p] - l + 1);
+    		for (int i = L[q]; i <= r; ++i) ans += a[i];
+    		ans += add[q] * (r - L[q] + 1);
+    	}
+    	return ans;
+    }
+    int solve() {
+    	n = read(); m = read();
+    	for (int i = 1; i <= n; ++i) scanf("%lld", &a[i]);
+    	t = sqrt(n * 1.0);
+    	for (int i = 1; i <= t; ++i) {
+    		L[i] = (i - 1) * t + 1;
+    		R[i] = i * t;
+    	}
+    	if (R[t] < n) t++, L[t] = R[t - 1] + 1, R[t] = n;
+    	for (int i = 1; i <= t; ++i) {
+    		for (int j = L[i]; j <= R[i]; ++j) {
+    			pos[j] = i;
+    			sum[i] += a[j];
+    		}
+        }
+    	while (m--) {
+    		int opt = read(), l = read(), r = read(), d;
+    		if (opt == 1) {
+                d = read();
+    			change(l, r, d);
+    		} else printf("%lld\n", query(l, r));
+    	}
+        return 0;
+    }
+};
+
+/**
+ * @brief 莫队算法
+ */
+struct CaptainMo {
+    struct query {
+        int l, r, id, pos;
+    }q[maxn];
+    bool cmp(query a, query b) {
+        if (a.pos == b.pos) {
+            if (a.pos % 2 == 1) return a.r < b.r;
+            else return a.r > b.r;
+        }
+        return a.pos < b.pos;
+    }
+    int n, m, k, len, L, R, Ans;
+    int ans[50010], c[50010], cnt[50010];
+    void del(int x) {
+        Ans -= (2 * cnt[c[x]] - 1); cnt[c[x]]--;
+    }
+    void add(int x) {
+        Ans += (2 * cnt[c[x]] + 1); cnt[c[x]]++;
+    }
+    int solve(){
+        n = read(); m = read(); k = read();
+        len = sqrt(n);
+        for (int i = 1; i <= n; ++i) c[i] = read();
+        for (int i = 1; i <= m; ++i) {
+            q[i].l = read(); q[i].r = read();
+            q[i].id = i; q[i].pos = q[i].l / len + 1;
+        }
+        sort(q + 1, q + 1 + m, cmp); L = 1;
+        for (int i = 1; i <= m; ++i) {
+            while (L < q[i].l) del(L++);
+            while (R > q[i].r) del(R--);
+            while (L > q[i].l) add(--L);
+            while (R < q[i].r) add(++R);
+            ans[q[i].id] = Ans;
+        }
+        for (int i = 1; i <= m; ++i) printf("%d\n", ans[i]);
+        return 0;
     }
 };
 
