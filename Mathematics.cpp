@@ -568,3 +568,24 @@ void Lagrange() {
     }
     printf("%d\n", (ans + p) % p);
 }
+
+/**
+ * @brief 自适应辛普森法
+ * @param[in]  f(x)
+ * @return \int_l^r{f(x)dx}
+ */
+
+inline double f(double x);
+inline double simpson(double l, double r) {
+    double mid = (l + r) / 2;
+    return (f(l) + 4 * f(mid) + f(r)) * (r - l) / 6;
+}
+double asr(double l, double r, double eps, double ans) {
+    double mid = (l + r) / 2;
+    double L = simpson(l, mid), R = simpson(mid, r);
+    if (fabs(L + R - ans) <= 15 * eps) return L + R + (L + R - ans) / 15;
+    return asr(l, mid, eps / 2, L) + asr(mid, r, eps / 2, R);
+}
+double integral(double l, double r, double eps) {
+    return asr(l, r, eps, simpson(l, r));
+}
