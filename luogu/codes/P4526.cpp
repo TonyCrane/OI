@@ -23,7 +23,7 @@ double asr(double l, double r, double eps, double ans) {
     double mid = (l + r) / 2;
     double L = simpson(l, mid), R = simpson(mid, r);
     if (fabs(L + R - ans) <= 15 * eps) return L + R + (L + R - ans) / 15;
-    return asr(l, mid, eps / 2, L) + asr(mid, r, eps / 2, R);
+    return asr(l, mid, eps, L) + asr(mid, r, eps, R);
 }
 
 double integral(double l, double r, double eps) {
@@ -33,6 +33,6 @@ double integral(double l, double r, double eps) {
 int main() {
     scanf("%lf", &a);
     if (a < 0) return printf("orz\n"), 0;
-    printf("%.5lf\n", integral(0, 20, 1e-10));
+    printf("%.5lf\n", integral(1e-10, 15, 1e-10));
     return 0;
 }
