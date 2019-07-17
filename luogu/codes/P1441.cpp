@@ -18,27 +18,31 @@ inline int read() {
 const int maxn = 22;
 const int maxm = 2010;
 
-int n, m, ans;
+int n, m, ans, cnt, tmp;
 int a[maxn];
-bool dp[maxn], vis[maxn];
+bool dp[maxm], vis[maxn];
+
+void DP() {
+    memset(dp, 0, sizeof(dp)); dp[0] = true;
+    cnt = 0; tmp = 0;
+    for (int i = 0; i < n; ++i) {
+        if (vis[i]) continue;
+        for (int j = cnt; j >= 0; --j) {
+            if (dp[j] && !dp[j + a[i]]) {
+                dp[j + a[i]] = true;
+                tmp++;
+            }
+        }
+        cnt += a[i];
+    }
+    ans = max(ans, tmp);
+}
 
 void dfs(int now, int cur) {
     if (now > m) return;
     if (cur == n) {
         if (now == m) {
-            memset(dp, 0, sizeof(dp)); dp[0] = true;
-            int cnt = 0, tmp = 0;
-            for (int i = 0; i < n; ++i) {
-                if (vis[i]) continue;
-                for (int j = cnt; j >= 0; --j) {
-                    if (dp[j] && !dp[j + a[i]]) {
-                        dp[j + a[i]] = true;
-                        tmp++;
-                    }
-                }
-                cnt += a[i];
-            }
-            ans = max(ans, tmp);
+            DP();
         }
         return;
     }
