@@ -31,7 +31,7 @@ void func(int now) {
                 if (nxt >= 2) {
                     for (int j = i; j <= i + nxt - 1; ++j) p[j] -= 3;
                     hav += 3 * nxt; func(now + 1);
-                    for (int j = 1; j <= i + nxt - 1; ++j) p[j] += 3;
+                    for (int j = i; j <= i + nxt - 1; ++j) p[j] += 3;
                     hav -= 3 * nxt;
                     if (now >= ans) return;
                 }
@@ -46,7 +46,7 @@ void func(int now) {
                 if (nxt >= 3) {
                     for (int j = i; j <= i + nxt - 1; ++j) p[j] -= 2;
                     hav += 2 * nxt; func(now + 1);
-                    for (int j = 1; j <= i + nxt - 1; ++j) p[j] += 2;
+                    for (int j = i; j <= i + nxt - 1; ++j) p[j] += 2;
                     hav -= 2 * nxt;
                     if (now >= ans) return;
                 }
@@ -61,7 +61,7 @@ void func(int now) {
                 if (nxt >= 5) {
                     for (int j = i; j <= i + nxt - 1; ++j) p[j] -= 1;
                     hav += 1 * nxt; func(now + 1);
-                    for (int j = 1; j <= i + nxt - 1; ++j) p[j] += 1;
+                    for (int j = i; j <= i + nxt - 1; ++j) p[j] += 1;
                     hav -= 1 * nxt;
                     if (now >= ans) return;
                 }
