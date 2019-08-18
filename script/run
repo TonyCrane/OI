@@ -3,43 +3,43 @@
 hel="--help"
 if [ -n "$1" ]; then
 	if [[ $1 != $hel ]]; then
-		echo "读取源文件 : $1.cpp"
+		echo "Reading file : $1.cpp"
 		if [ ! -f "$1.cpp" ] ; then
-			echo "C++文件不存在！"
+			echo "Can't read file : $1.cpp"
 			exit
 		fi
 
-		echo "读取输入文件：$1.in"
+		echo "Reading file : $1.in"
 		if [ ! -f "$1.in" ] ; then
-			echo "输入文件不存在！"
+			echo "Can't read file : $1.in"
 			exit
 		fi
 
-		echo "读取输出文件：$1.out"
+		echo "Reading file : $1.out"
 		if [ ! -f "$1.out" ] ; then
-			echo "输出文件不存在！"
+			echo "Can't read file : $1.out"
 			exit
 		fi
 
-		echo -e "\n成功读取文件"
+		echo -e "Files are ready for compile."
 
 		g++ -o $1 $1.cpp
 		if [ $? -ne 0 ] ; then
-			echo -e "\n\n编译错误！"
+			echo -e "\n\nCompile Error！"
 			exit
 		fi
-		echo -e "\n编译成功\n"
+		echo -e "\nCompiled successfully\n"
 
 		./$1 < $1.in > a.out
 		diff --ignore-space-change --ignore-blank-lines $1.out a.out
 		if [ $? -ne 0 ] ; then
-			echo -e "\n\n输出结果错误！"
+			echo -e "\n\nWrong Answer！"
 			exit
 		fi
 
 		cat a.out
-		echo -e "\n\n样例通过，用时："
-		/usr/bin/time -f "time: %U\n" ./$1 < $1.in > a.out
+		echo -e "\nAccepted!"
+		# /usr/bin/time -f "time: %U\n" ./$1 < $1.in > a.out
 
 		y="y"
 		# read -p "是否使用gedit打开文件?(y/n) > " op1
@@ -47,15 +47,15 @@ if [ -n "$1" ]; then
 		# 	gedit $1.cpp
 		# fi
 
-		read -p "是否整理文件?(y/n) > " op
+		read -p "Archive files?(y/n) > " op
 		if [ $op = $y ] ; then
-			read -p "输入归档文件夹 > " fold
+			read -p "Archive folder > " fold
 			rm $1
 			rm a.out
 			mv $1.out $fold/outputs/
 			mv $1.cpp $fold/codes/
 			mv $1.in $fold/inputs/
-			echo "整理成功"
+			echo "Archive successfully"
 			sleep 2s
 			clear
 		fi
