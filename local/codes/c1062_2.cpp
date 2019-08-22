@@ -26,7 +26,7 @@ const int maxn = 10;
 
 bool fini;
 int n, in[maxn][maxn], cur[maxn][maxn];
-int G[maxn][maxn], ans[maxn][maxn]; // 1 / 2 "\"
+int ans[maxn][maxn]; // 1 / 2 "\"
 int lim[maxn][maxn];
 int go[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
 
@@ -88,31 +88,26 @@ void dfs(int x, int y) {
 }
 
 int main() {
-    int T = read();
-    while (T--) {
-        n = read(); n++;
-        fini = false;
-        memset(cur, 0, sizeof(cur));
-        memset(ufs, 0, sizeof(ufs));
-        for (int i = 1; i <= n; ++i) {
-            for (int j = 1; j <= n; ++j) {
-                lim[i][j] = 4;
-                in[i][j] = readmap();
-                if ((i == 1 || i == n) && (j == 1 || j == n)) { lim[i][j] = 1; continue; }
-                if (i == 1 || i == n || j == 1 || j == n) lim[i][j] = 2;
+    n = read(); n++;
+    fini = false;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= n; ++j) {
+            lim[i][j] = 4;
+            in[i][j] = readmap();
+            if ((i == 1 || i == n) && (j == 1 || j == n)) { lim[i][j] = 1; continue; }
+            if (i == 1 || i == n || j == 1 || j == n) lim[i][j] = 2;
+        }
+    }
+    dfs(1, 1);
+    for (int i = 1; i <= n - 1; ++i) {
+        for (int j = 1; j <= n - 1; ++j) {
+            if (ans[i][j] == 1) {
+                printf("/");
+            } else {
+                printf("\\");
             }
         }
-        dfs(1, 1);
-        for (int i = 1; i <= n - 1; ++i) {
-            for (int j = 1; j <= n - 1; ++j) {
-                if (ans[i][j] == 1) {
-                    printf("/");
-                } else {
-                    printf("\\");
-                }
-            }
-            printf("\n");
-        }
+        printf("\n");
     }
     return 0;
 }
