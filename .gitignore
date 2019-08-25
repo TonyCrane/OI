@@ -2,3 +2,7 @@
 *.in~
 *.out~
 .vscode/
+LaTeX/*.aux
+LaTeX/*.log
+LaTeX/*.out
+LaTeX/*.synctex.gz
