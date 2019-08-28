@@ -1,0 +1,15 @@
+14
+create 1 5 3 
+create 2 3 4 
+create 3 5 5 
+message 1 5 
+message 3 4 
+message 3 4 
+run 
+process 3 
+killmax 
+run 
+message 2 10 
+message 3 8 
+change 3 6 
+run

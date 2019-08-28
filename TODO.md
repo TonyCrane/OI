@@ -1,8 +1,8 @@
 - [ ] SPFA的SLF和LLL优化
-- [ ] k短路(A*)
+- [x] k短路(A*)
 - [ ] 八数码难题(A*)
 - [ ] 续写LaTeX
-- [ ] 继续学习ID-dfs
+- [x] 继续学习ID-dfs
 - [ ] 双向dfs
 - [ ] 双端队列bfs
 - [ ] 优先队列bfs
