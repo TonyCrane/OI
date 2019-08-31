@@ -30,7 +30,7 @@ struct Process {
     int pid;
     long long data;
     Process() {data = pid = 0;}
-    Process(int id, int mem): pid(id), data(mem) {}
+    Process(int id, long long mem): pid(id), data(mem) {}
     bool operator < (const Process& a) const {
         if (data == a.data) {
             return pid > a.pid;
@@ -140,8 +140,8 @@ void _killmax() {
         printf("Empty\n");
         return;
     } else {
-        printf("Kill: %d\n", __ALL_MEMORY_.top().pid);
         valid[__ALL_MEMORY_.top().pid] = false;
+        printf("Kill: %d\n", __ALL_MEMORY_.top().pid);
         __ALL_MEMORY_.pop();
         return;
     }
@@ -165,11 +165,11 @@ int main() {
         } else if (strcmp(opt, _CHANGE) == 0) {
             int pid = read(), pri = read();
             _change(pid, pri);
+        } else if (strcmp(opt, _KILLMAX) == 0) {
+            _killmax();
         } else if (strcmp(opt, _KILL) == 0) {
             int pid = read();
             _kill(pid);
-        } else if (strcmp(opt, _KILLMAX) == 0) {
-            _killmax();
         }
     }
     return 0;

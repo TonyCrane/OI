@@ -1,4 +1,4 @@
-- [ ] SPFA的SLF和LLL优化
+- [x] SPFA的SLF和LLL优化
 - [x] k短路(A*)
 - [ ] 八数码难题(A*)
 - [ ] 续写LaTeX
