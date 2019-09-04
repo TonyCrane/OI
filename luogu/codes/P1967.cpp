@@ -15,27 +15,19 @@ inline int read() {
     return x * f;
 }
 
-const int maxn = 10010;
+const int maxn = 100010;
 const int inf  = 0x7fffffff;
 
 int n, m, q;
 
 struct Edge {
     int from, to, val;
-    Edge(int u, int v, int w): from(u), to(v), val(w) {}
-};
-vector<Edge> edges;  vector<Edge> trees;
-vector<int> G[maxn]; vector<int> T[maxn];
-void add(int u, int v, int w) {
-    edges.push_back(Edge(u, v, w));
-    edges.push_back(Edge(v, u, w));
-    int mm = edges.size();
-    G[v].push_back(mm - 1);
-    G[u].push_back(mm - 2);
-}
+}edges[maxn];
+vector<Edge> trees;
+vector<int> T[maxn];
 void addtree(int u, int v, int w) {
-    trees.push_back(Edge(u, v, w));
-    trees.push_back(Edge(v, u, w));
+    trees.push_back((Edge){u, v, w});
+    trees.push_back((Edge){v, u, w});
     int mm = trees.size();
     T[v].push_back(mm - 1);
     T[u].push_back(mm - 2);
@@ -51,7 +43,7 @@ inline int find(int x) {
 
 void Kruskal() {
     for (int i = 1; i <= n; ++i) ufs[i] = i;
-    sort(edges.begin(), edges.end(), cmp);
+    sort(edges + 1, edges + 1 + m, cmp);
     for (int i = 0; i < m; ++i) {
         Edge& e = edges[i];
         int x = find(e.from), y = find(e.to);
@@ -62,7 +54,8 @@ void Kruskal() {
     }
 }
 
-int vis[maxn], dep[maxn], f[maxn][21], w[maxn][21];
+bool vis[maxn];
+int dep[maxn], f[maxn][21], w[maxn][21];
 
 void dfs(int x) {
     vis[x] = true;
@@ -102,7 +95,9 @@ int main() {
     n = read(); m = read();
     for (int i = 1; i <= m; ++i) {
         int u = read(), v = read(), w = read();
-        add(u, v, w);
+        edges[i].from = u;
+        edges[i].to = v;
+        edges[i].val = w;
     }
     Kruskal();
     for (int i = 1; i <= n; ++i) {

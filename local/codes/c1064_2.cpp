@@ -31,44 +31,39 @@ void add(int u, int v, int w) {
     G[u].push_back(mm - 2);
 }
 
-struct heap {
-    int u;
-    long long d;
-    bool operator < (const heap& a) const {
-        return d > a.d;
-    }
-};
 
+bool vis[maxn];
 int n, m, pre[maxn];
 long long ans = 0, dis[maxn];
 
-void Dijkstra(int s) {
-    priority_queue<heap> q;
-    memset(dis, 0x3f, sizeof(dis));
-    dis[s] = 0;
-    q.push((heap){s, 0});
+void SPFA(int s) {
+    queue<int> q;
+    memset(dis, 0x7f, sizeof(dis));
+    memset(vis, 0, sizeof(vis));
+    q.push(s); dis[s] = 0;
     while (!q.empty()) {
-        heap top = q.top(); q.pop();
-        int u = top.u, td = top.d;
-        if (td != dis[u]) continue;
+        int u = q.front(); q.pop();
+        vis[u] = false;
         for (int i = 0; i < G[u].size(); ++i) {
             Edge& e = edges[G[u][i]];
             if (dis[e.to] >= dis[u] + e.val) {
                 if (dis[e.to] > dis[u] + e.val) {
-                    ans += (long long)e.val;
-                    if (dis[e.to] != 0x3f3f3f3f) {
-                        ans -= (long long)pre[e.to];
+                    ans += e.val;
+                    if (dis[e.to] != 0x7f7f7f7f) {
+                        ans -= pre[e.to];
                     }
                     pre[e.to] = e.val;
                 } else {
                     if (pre[e.to] > e.val) {
-                        ans += (long long)e.val;
-                        ans -= (long long)pre[e.to];
+                        ans += e.val - pre[e.to];
                         pre[e.to] = e.val;
                     }
                 }
-                dis[e.to] = dis[u] + (long long)e.val;
-                q.push((heap){e.to, dis[e.to]});
+                dis[e.to] = dis[u] + e.val;
+                if (!vis[e.to]) {
+                    vis[e.to] = true;
+                    q.push(e.to);
+                }
             }
         }
     }
@@ -81,7 +76,7 @@ int main() {
         add(u, v, w);
     }
     int s = read();
-    Dijkstra(s);
+    SPFA(s);
     printf("%lld\n", ans);
     return 0;
 }
