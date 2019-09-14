@@ -73,22 +73,22 @@ struct SegmentTree {
         #define r(x) tree[x].r
         #define sum(x) tree[x].sum
         #define add(x) tree[x].add
-    } tree[maxn * 4];
+    } tree[maxn << 2];
     int a[maxn], n, m;
     void build(int p, int l, int r) {
         l(p) = l, r(p) = r;
         if (l == r) { sum(p) = a[l]; return; }
         int mid = (l + r) >> 1;
-        build(p * 2, l, mid);
-        build(p * 2 + 1, mid + 1, r);
-        sum(p) = sum(p * 2) + sum(p * 2 + 1);
+        build(p<<1, l, mid);
+        build(p<<1|1, mid + 1, r);
+        sum(p) = sum(p<<1) + sum(p<<1|1);
     }
     void pushdown(int p) {
         if (add(p)) {
-            sum(p * 2) += add(p) * (r(p * 2) - l(p * 2) + 1);
-            sum(p * 2 + 1) += add(p) * (r(p * 2 + 1) - l(p * 2 + 1) + 1);
-            add(p * 2) += add(p);
-            add(p * 2 + 1) += add(p);
+            sum(p<<1) += add(p) * (r(p<<1) - l(p<<1) + 1);
+            sum(p<<1|1) += add(p) * (r(p<<1|1) - l(p<<1|1) + 1);
+            add(p<<1) += add(p);
+            add(p<<1|1) += add(p);
             add(p) = 0;
         }
     }
@@ -100,17 +100,17 @@ struct SegmentTree {
         }
         pushdown(p);
         int mid = (l(p) + r(p)) >> 1;
-        if (l <= mid) update(p * 2, l, r, d);
-        if (r >  mid) update(p * 2 + 1, l, r, d);
-        sum(p) = sum(p * 2) + sum(p * 2 + 1);
+        if (l <= mid) update(p<<1, l, r, d);
+        if (r >  mid) update(p<<1|1, l, r, d);
+        sum(p) = sum(p<<1) + sum(p<<1|1);
     }
     long long query(int p, int l, int r) {
         if (l <= l(p) && r >= r(p)) return sum(p);
         pushdown(p);
         int mid = (l(p) + r(p)) >> 1;
         long long ans = 0;
-        if (l <= mid) ans += query(p * 2, l, r);
-        if (r >  mid) ans += query(p * 2 + 1, l, r);
+        if (l <= mid) ans += query(p<<1, l, r);
+        if (r >  mid) ans += query(p<<1|1, l, r);
         return ans;
     }
     #undef add
