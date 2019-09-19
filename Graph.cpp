@@ -495,6 +495,47 @@ namespace LCA
 
 }
 
+namespace LCA_TreeChainSplit
+{
+
+    int n, m, s;
+    int dep[maxn], siz[maxn], fa[maxn], son[maxn], top[maxn];
+    void dfs1(int x, int f, int depth) {
+        dep[x] = depth; fa[x] = f;
+        siz[x] = 1; int maxs = -1;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (e.to == f) continue;
+            dfs1(e.to, x, depth + 1);
+            siz[x] += siz[e.to];
+            if (siz[e.to] > maxs) {
+                son[x] = e.to;
+                maxs = siz[e.to];
+            }
+        }
+    }
+    void dfs2(int x, int topf) {
+        top[x] = topf;
+        if (!son[x]) return;
+        dfs2(son[x], topf);
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (e.to == fa[x] || e.to == son[x]) continue;
+            dfs2(e.to, e.to);
+        }
+    }
+    int lca(int x, int y) {
+        while (top[x] != top[y]) {
+            if (dep[top[x]] < dep[top[y]]) swap(x, y);
+            x = fa[top[x]];
+        }
+        if (dep[x] > dep[y]) swap(x, y);
+        return x;
+    }
+    /* dfs1(root, 0, 1); dfs2(root, root); */
+
+}
+
 namespace Tarjan_cut
 {
 
