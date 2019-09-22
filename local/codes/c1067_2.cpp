@@ -136,6 +136,6 @@ int main() {
     dfs1(1, 0);
     clear();
     dfs2(1, 0, 0);
-    printf("%d\n", ans);
+    printf("%lld\n", ans);
     return 0;
 }
