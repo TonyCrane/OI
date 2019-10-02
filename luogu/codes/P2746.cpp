@@ -15,7 +15,7 @@ inline int read() {
     return x * f;
 }
 
-const int maxn = 110;
+const int maxn = 1010;
 
 struct Edge {
     int from, to;
@@ -29,8 +29,8 @@ void add(int u, int v) {
     G[u].push_back(mm - 1);
 }
 
-int dfn[maxn], low[maxn], c[maxn];
-int val[maxn], sum[maxn], n, m, num, cnt;
+int dfn[maxn], low[maxn], c[maxn], degI[maxn], degO[maxn];
+int val[maxn], sum[maxn], n, m, num, cnt, ans1, ans2;
 stack<int> s; bool ins[maxn];
 vector<int> scc[maxn];
 
@@ -56,7 +56,7 @@ void tarjan(int x) {
 }
 
 int main() {
-    n = read();
+    n = read(); int tot = 0;
     for (int u = 1; u <= n; ++u) {
         int v;
         while (cin >> v && v) {
@@ -68,4 +68,20 @@ int main() {
             tarjan(i);
         }
     }
+    for (int u = 1; u <= n; ++u) {
+        for (int i = 0; i < G[u].size(); ++i) {
+            Edge& e = edges[G[u][i]];
+            if (c[u] != c[e.to]) {
+                degI[c[e.to]]++;
+                degO[c[u]]++;
+            }
+        }
+    }
+    for (int i = 1; i <= cnt; ++i) {
+        if (degI[i] == 0) ans1++;
+        if (degO[i] == 0) ans2++;
+    }
+    if (cnt == 1) printf("1\n0\n");
+    else printf("%d\n%d\n", ans1, max(ans1, ans2));
+    return 0;
 }
