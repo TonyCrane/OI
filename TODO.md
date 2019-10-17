@@ -8,5 +8,5 @@
 - [ ] 续写LaTeX
 - [ ] 转战BZOJ，准备省选
 
-# CSP-II 57 Days Left
+# CSP-II 29 Days Left
 rp++
