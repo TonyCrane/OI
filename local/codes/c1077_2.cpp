@@ -2,7 +2,7 @@
  *  > File Name        : c1077_2.cpp
  *  > Author           : Tony
  *  > Created Time     : 2019/10/18 15:14:23
- *  > Algorithm        : math 40 Points
+ *  > Algorithm        : math 100 PoLLs
 **************************************************************/
 
 #include <bits/stdc++.h>
@@ -34,19 +34,31 @@ void getprime(LL n) {
     }
 }
 
+LL f[maxn], s[maxn];
+
 int main() {
     LL T = read();
     getprime(10000000);
+    for (LL i = 1; i < maxn; ++i) f[i] = 1LL;
+    for (LL i = 2; i < maxn - 10; ++i) {
+        if (!vis[i]) {
+            s[i] = i; f[i] = (LL)(i - 1) * i + 1;
+            for (LL j = i, k = i * j; j < maxn && k < maxn; j = k, k = i * j) {
+                f[k] = (f[j] * i * i) - i + 1;
+                s[k] = i;
+            }
+        }
+        if (s[i]) {
+            for (LL j = 2; i * j < maxn; ++j) {
+                if (j % s[i]) {
+                    f[i * j] = f[i] * f[j];
+                }
+            }
+        }
+    }
     while (T--) {
-        LL n = read(), ans = 0;
-        if (!vis[n]) {
-            printf("%lld\n", n * (n - 1) + 1);
-            continue;
-        }
-        for (LL i = 1; i <= n; ++i) {
-            ans += n / gcd(i, n);
-        }
-        printf("%lld\n", ans);
+        LL n = read();
+        printf("%lld\n", f[n]);
     }
     return 0;
 }

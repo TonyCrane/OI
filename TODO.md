@@ -3,10 +3,11 @@
 - [x] 树剖写LCA
 - [x] 做完收藏的题目
 - [x] 刷完洛谷提高试炼场，并巩固 __数论__，__DP__ 和 __博弈论__
+- [ ] 巩固 __拓扑排序,树链剖分,Tarjan,莫队__
 - [ ] 刷几套NOIp真题
 - [ ] CSP一二轮考试
 - [ ] 续写LaTeX
 - [ ] 转战BZOJ，准备省选
 
-# CSP-II 29 Days Left
+# CSP-II 25 Days Left
 rp++
