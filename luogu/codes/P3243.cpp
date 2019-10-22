@@ -26,7 +26,7 @@ int main() {
         for (int i = 0; i <= n; ++i) G[i].clear();
         memset(degree, 0, sizeof(degree));
         memset(top, 0, sizeof(top)); cnt = 0;
-        queue<int> q;
+        priority_queue<int> q;
         n = read(), m = read();
         for (int i = 1; i <= m; ++i) {
             int u = read(), v = read();
@@ -39,7 +39,7 @@ int main() {
             }
         }
         while (!q.empty()) {
-            int u = q.front(); q.pop();
+            int u = q.top(); q.pop();
             top[++cnt] = u;
             for (int i = 0; i < G[u].size(); ++i) {
                 int& v = G[u][i];
