@@ -1,0 +1,26 @@
+#!/bin/bash
+
+hel="--help"
+rebuild="rebuild"
+if [ -n "$1" ]; then
+	if [[ $1 = $hel ]]; then
+        echo -e "帮助:\n\t使用 check <数据生成器> <第一个源文件> <第二个源文件> <比较次数> 来对拍"
+		echo -e "\t使用 check rebuild 重新编译主文件"
+		echo -e "\t文件均不加扩展名"
+		echo -e "\t使用 check --help 来查看帮助"
+	elif [[ $1 = $rebuild ]]; then
+		g++ -o /home/tony/Desktop/OI/script/checker /home/tony/Desktop/OI/script/checker.cpp
+		echo -e "成功重新编译checker文件"
+	else
+        /home/tony/Desktop/OI/script/checker $1 $2 $3 $4
+		rm data.in
+		rm first
+		rm first.out
+		rm second
+		rm second.out
+    fi
+else
+	echo -e "\033[1;31m[ERROR]\033[0m 无传入参数"
+	echo -e "\tcheck --help 查看帮助"
+	false
+fi
