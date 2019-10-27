@@ -108,15 +108,37 @@ int queryMax(int p, int l, int r) {
 
 /*- QueryAndOperation -*/
 void updRange(int x, int y, int k) {
-
+    while (top[x] != top[y]) {
+        if (dep[top[x]] < dep[top[y]]) swap(x, y);
+        update(1, id[top[x]], id[x], k);
+        x = fa[top[x]];
+    }
+    if (dep[x] > dep[y]) swap(x, y);
+    update(1, id[x], id[y], k);
 }
 
 int qRange(int x, int y) {
-
+    int ans = 0;
+    while (top[x] != top[y]) {
+        if (dep[top[x]] < dep[top[y]]) swap(x, y);
+        ans += querySum(1, id[top[x]], id[x]);
+        x = fa[top[x]];
+    }
+    if (dep[x] > dep[y]) swap(x, y);
+    ans += querySum(1, id[x], id[y]);
+    return ans;
 }
 
 int qMax(int x, int y) {
-
+    int ans = -0x3f3f3f3f;
+    while (top[x] != top[y]) {
+        if (dep[top[x]] < dep[top[y]]) swap(x, y);
+        ans = max(ans, queryMax(1, id[top[x]], id[x]));
+        x = fa[top[x]];
+    }
+    if (dep[x] > dep[y]) swap(x, y);
+    ans = max(ans, queryMax(1, id[x], id[y]));
+    return ans;
 }
 
 int main() {
@@ -133,9 +155,16 @@ int main() {
     int q = read();
     for (int i = 1; i <= q; ++i) {
         char opt[20]; scanf("%s", opt);
-
-
-
-        
+        if (opt[0] == 'C') {
+            int x = read(), y = read();
+            updRange(x, x, y);
+        } else if (opt[1] == 'M') {
+            int x = read(), y = read();
+            printf("%d\n", qMax(x, y));
+        } else if (opt[1] == 'S') {
+            int x = read(), y = read();
+            printf("%d\n", qRange(x, y));
+        }
     }
+    return 0;
 }
