@@ -15,7 +15,7 @@ inline int read() {
     return x * f;
 }
 
-const int maxn = 100010;
+const int maxn = 100500;
 
 int n, m, len, a[maxn], l, r, ans[maxn];
 
@@ -24,11 +24,11 @@ struct Query {
     int id, pos;
 }q[maxn];
 bool cmp(Query a, Query b) {
-    if (a.pos != b.pos) a.pos < b.pos;
-    return a.r < a.r;
+    if (a.pos != b.pos) return a.pos < b.pos;
+    return a.r < b.r;
 }
 
-int cnt[maxn];
+int cnt[10050];
 
 void add(int x) { cnt[a[x]]++; }
 void del(int x) { cnt[a[x]]--; }

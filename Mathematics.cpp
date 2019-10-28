@@ -40,17 +40,21 @@ void exgcd(LL a, LL b, LL& d, LL& x, LL& y) {
 
 /**
  * @brief Eratosthenes筛法
- * @param[in]  n  终止
+ * @param[in]  n  最大值
  */
-bool vis[maxn];
-int prime[maxn];
-void getprime(int n) {
-    int m = (int)sqrt(n + 0.5), num = 0;
+LL vis[maxn];
+LL prime[maxn], sum[maxn], num;
+void getprime(LL n) {
     memset(vis, 0, sizeof(vis));
-    vis[0] = vis[1] = 1;
-    for (int i = 2; i <= m; ++i) if (!vis[i]) {
-        prime[++num] = i;
-        for (int j = i * i; j <= n; j += i) vis[j] = 1;
+    for (int i = 2; i <= n; ++i) {
+        if (vis[i] == 0) {
+            vis[i] = i;
+            prime[++num] = i;
+        }
+        for (int j = 1; j <= num; ++j) {
+            if (prime[j] > vis[i] || prime[j] > n / i) break;
+            vis[i * prime[j]] = prime[j];
+        }
     }
 }
 
