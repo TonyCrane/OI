@@ -31,7 +31,7 @@ if [ -n "$1" ]; then
 		echo -e "\nCompiled successfully\n"
 
 		./$1 < $1.in > a.out
-		diff --ignore-space-change --ignore-blank-lines $1.out a.out
+		diff $1.out a.out -w
 		if [ $? -ne 0 ] ; then
 			echo -e "\n\nWrong Answer！"
 			exit
