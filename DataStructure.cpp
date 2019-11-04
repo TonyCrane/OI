@@ -41,6 +41,23 @@ struct UnionFindSet {
 };
 
 /**
+ * @brief 哈希表
+ */
+struct Hash_Map {
+    int ver[N], nxt[N], head[mod + 10], cnt, val[N];
+    void add(int u, int v) {
+        ver[++cnt] = v; nxt[cnt] = head[u]; head[u] = cnt;
+    }
+    int& operator [] (int v) {
+        for (int i = head[v & mod]; i; i = nxt[i]) {
+            if (ver[i] == v) return val[i];
+        }
+        add(v & mod, v);
+        return val[cnt];
+    }
+}
+
+/**
  * @brief 树状数组
  */
 struct BIT {
