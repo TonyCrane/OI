@@ -6,3 +6,6 @@ LaTeX/*.aux
 LaTeX/*.log
 LaTeX/*.out
 LaTeX/*.synctex.gz
+LaTeX/*.nav
+LaTeX/*.snm
+LaTeX/*.toc

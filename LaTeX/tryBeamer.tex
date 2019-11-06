@@ -1,0 +1,40 @@
+\documentclass[UTF8]{beamer}
+\usepackage{xeCJK}
+
+\usetheme{Berlin}
+
+\title{测试\texttt{beamer}}
+\author{$Tony\_Wong$}
+\institute{JLYZ OI team}
+\date{November 6th, 2019}
+
+\begin{document}
+    \frame{\titlepage}
+
+	\section{Section 1.}
+    \begin{frame}
+        \frametitle{Hello, World!}
+        Hello, World!
+    \end{frame}
+	\begin{frame}
+		中文测试\\
+		换行\\ \pause
+		测试
+	\end{frame}
+
+	\section{Section 2.}
+	\begin{frame}
+		\frametitle{数学公式}
+		$$\int_0^\pi{\sin(x) dx}=2$$
+	\end{frame}
+
+	\section{Section 3.}
+	\begin{frame}
+		\begin{itemize}
+			\item<1-> 测试一
+			\item<2-> 测试二
+			\item<3-> 测试三
+		\end{itemize}
+	\end{frame}
+
+\end{document}
