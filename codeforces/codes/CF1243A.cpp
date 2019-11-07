@@ -1,7 +1,7 @@
 /*************************************************************
- *  > File Name        : CF1256B.cpp
+ *  > File Name        : CF1243A.cpp
  *  > Author           : Tony
- *  > Created Time     : 2019/11/04 21:44:49
+ *  > Created Time     : 2019/11/07 20:48:11
  *  > Algorithm        : 
 **************************************************************/
 
@@ -15,15 +15,26 @@ inline int read() {
     return x * f;
 }
 
-const int maxn = 110;
+const int maxn = 1010;
 
-int a[maxn];
+int n, a[maxn], ans;
+
+bool cmp(int a, int b) {
+    return a > b;
+}
 
 int main() {
     int T = read();
     while (T--) {
-        int n = read();
+        n = read();
         for (int i = 1; i <= n; ++i) a[i] = read();
-        
+        sort(a + 1, a + 1 + n, cmp);
+        for (int i = 1; i <= n; ++i) {
+            if (a[i] >= i) {
+                ans = i;
+            }
+        }
+        printf("%d\n", ans);
     }
+    return 0;
 }
