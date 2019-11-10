@@ -1,9 +1,9 @@
 /*************************************************************
  *  > Description      : 数据结构模板
  *  > File Name        : DataStructure.cpp
- *  > Author           : Tony
+ *  > Author           : Tony_Wong
  *  > Created Time     : 2019/05/29 12:11:37
- *  > Copyright (C) 2019 Tony
+ *  > Copyright (C) 2019 Tony_Wong
 **************************************************************/
 
 #include <bits/stdc++.h>

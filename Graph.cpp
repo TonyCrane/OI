@@ -1,9 +1,9 @@
 /*************************************************************
  *  > Description      : 图论模板
  *  > File Name        : Graph.cpp
- *  > Author           : Tony
+ *  > Author           : Tony_Wong
  *  > Created Time     : 2019/09/01 14:04:05
- *  > Copyright (C) 2019 Tony
+ *  > Copyright (C) 2019 Tony_Wong
 **************************************************************/
 
 #include <bits/stdc++.h>

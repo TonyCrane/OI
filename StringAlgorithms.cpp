@@ -1,9 +1,9 @@
 /*************************************************************
  *  > Description      : 字符串算法模板
  *  > File Name        : StringAlgorithms.cpp
- *  > Author           : Tony
+ *  > Author           : Tony_Wong
  *  > Created Time     : 2019/05/26 17:26:25
- *  > Copyright (C) 2019 Tony
+ *  > Copyright (C) 2019 Tony_Wong
 **************************************************************/
 
 #include <bits/stdc++.h>

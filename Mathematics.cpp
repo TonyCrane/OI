@@ -1,9 +1,9 @@
 /*************************************************************
  *  > Description      : 数学相关模板
  *  > File Name        : Mathematics.cpp
- *  > Author           : Tony
+ *  > Author           : Tony_Wong
  *  > Created Time     : 2019/05/07 14:46:56
- *  > Copyright (C) 2019 Tony
+ *  > Copyright (C) 2019 Tony_Wong
 **************************************************************/
 
 #include <bits/stdc++.h>

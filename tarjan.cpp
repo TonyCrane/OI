@@ -1,9 +1,9 @@
 /*************************************************************
  *  > Description      : 连通分量系列模板
  *  > File Name        : tarjan.cpp
- *  > Author           : Tony
+ *  > Author           : Tony_Wong
  *  > Created Time     : 2019/09/02 12:57:56
- *  > Copyright (C) 2019 Tony
+ *  > Copyright (C) 2019 Tony_Wong
 **************************************************************/
 
 #include <bits/stdc++.h>

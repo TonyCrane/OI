@@ -1,9 +1,9 @@
 /*************************************************************
  *  > Description      : 计算几何模板
  *  > File Name        : Geometry.cpp
- *  > Author           : Tony
+ *  > Author           : Tony_Wong
  *  > Created Time     : 2019/04/28 19:01:25
- *  > Copyright (C) 2019 Tony
+ *  > Copyright (C) 2019 Tony_Wong
 **************************************************************/
 
 #include <bits/stdc++.h>
