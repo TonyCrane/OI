@@ -55,7 +55,7 @@ struct Hash_Map {
         add(v & mod, v);
         return val[cnt];
     }
-}
+};
 
 /**
  * @brief 树状数组
