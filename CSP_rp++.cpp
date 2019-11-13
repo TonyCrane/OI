@@ -524,3 +524,110 @@ void remove(int& p, int val) {
 
 
 /*-------- 图论 --------*/
+// 欧拉回路
+void dfs(int x) {
+    for (int y = 1; y <= maxn; ++y) {
+        if (G[x][y]) {
+            G[x][y] = 0;
+            G[y][x] = 0;
+            dfs(y);
+        }
+    }
+    ans[++ansi] = x;
+    return;
+}
+for (int i = 1; i <= maxn; ++i) {
+    if (deg[i] % 2) {
+        cnt++;
+        if (!root) root = i;
+    }
+}
+if (!root) {
+    for (int i = 1; i <= maxn; ++i) {
+        if (deg[i]) {
+            root = i; break;
+        }
+    }
+}
+if (cnt && cnt != 2) {
+    printf("No Solution\n");
+    return 0;
+}
+dfs(root);
+
+// SPFA
+void SPFA(int s) {
+    memset(dis, 0x3f, sizeof(dis));
+    memset(vis, 0, sizeof(vis));
+    vis[s] = true; dis[s] = 0; q.push(s);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        vis[u] = false;
+        for (int i = 0; i < G[u].size(); ++i) {
+            Edge& e = edges[G[u][i]];
+            if (dis[e.to] > dis[u] + e.val) {
+                dis[e.to] = dis[u] + e.val;
+                if (!vis[e.to]) {
+                    q.push(e.to);
+                    vis[e.to] = true;
+                }
+            }
+        }
+    }
+}
+
+// Dijkstra堆优化
+struct heap {
+    int u, d;
+    bool operator < (const heap& a) const {
+        return d > a.d;
+    }
+};
+void Dijkstra(int s) {
+    priority_queue<heap> q;
+    memset(dis, 0x3f, sizeof(dis));
+    dis[s] = 0;
+    q.push((heap){s, 0});
+    while (!q.empty()) {
+        heap top = q.top(); q.pop();
+        int u = top.u, td = top.d;
+        if (td != dis[u]) continue;
+        for (int i = 0; i < G[u].size(); ++i) {
+            Edge& e = edges[G[u][i]];
+            if (dis[e.to] > dis[u] + e.val) {
+                dis[e.to] = dis[u] + e.val;
+                q.push((heap){e.to, dis[e.to]});
+            }
+        }
+    }
+}
+
+// Kruskal
+struct Edge {
+    int from, to, val;
+}edges[maxm];
+bool cmp(Edge a, Edge b) {
+    if (a.val != b.val) return a.val < b.val;
+    if (a.from != b.from) return a.from < b.from;
+    return a.to < b.to;
+}
+int ufs[maxn], ans, cnt = 1, n, m;
+int find(int x) { return ufs[x] == x ? x : ufs[x] = find(ufs[x]); }
+void Kruskal() {
+    for (int i = 1; i <= n; ++i) ufs[i] = i;
+    sort(edges + 1, edges + 1 + m, cmp);
+    for (int i = 1; i <= m; ++i) {
+        int x = find(edges[i].from);
+        int y = find(edges[i].to);
+        if (x != y) {
+            ufs[x] = y; cnt++;
+            ans += edges[i].val;
+        }
+    }
+}
+
+// 传递闭包
+for (int k = 1; k <= n; ++k) 
+    for (int i = 1; i <= n; ++i)
+        for (int j = 1; j <= n; ++j)
+            G[i][j] |= G[i][k] & G[k][j];
