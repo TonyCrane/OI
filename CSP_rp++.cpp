@@ -609,6 +609,15 @@ if (!vis[e.to]) {
 }
 if (cnt[e.to] >= n) return true;
 
+// 差分约束
+a − b ≥ c 从a到b建−c单向边
+a − b ≤ c 从b到a建c单向边
+a = b     从a到建权值为0的双向边
+从0向所有节点建一条边权为0的单向边
+求解时,设dis[0]=0,然后以0为源点求单源最短路
+如果存在负环,则系统无解
+不存在负环,则dis[i]为系统的一组解
+
 
 // Dijkstra堆优化
 struct heap {
@@ -1216,3 +1225,62 @@ Base.mat[1][0] = 1; Base.mat[1][1] = 0;
 Fib.mat[0][0] = 1; Fib.mat[0][1] = 1;
 Matrix_pow(n - 2);
 fib(n) = Fib.mat[0][0];
+
+
+
+/*-------------------------------- 注意 --------------------------------*/
+- 函数中变量赋初值
+- 循环变量别写错
+- 别忘开long long
+- mod别忘处理负数
+- freopen别注释
+- freopen别写错
+- rand别忘srand
+- 注意double
+- 注意有向边无向边
+- 算空间不要MLE
+- 二维数组行列别搞反
+- 数组下标别越界
+- 别忘判断除以0
+- 注意运算符优先级
+- 注意判循环边界
+- dfs注意终止
+- 注意强制转换类型
+- 快读别写错
+- 写过的debug代码都不要删
+
+<=10              n
+10 ~ 20           3^n
+10 ~ 25           2^n
+30 ~ 50           2^(n/2)
+<= 100            搜索
+100 ~ 500         n^3
+1000 ~ 5000       n^2
+100000 ~ 500000   nlog n
+>=500000N         n / log n / 1
+
+静态查错
+- 是否写上了 using namespace std
+- 数组开得是否够大？
+- 变量类型是否正确？
+- memset 时， 所填的 sizeof(x) 的 x 是不是匹配?大小是不是正确？
+- 外层循环与内层循环的 i,j 是不是混用了
+- 输入 数据都输入了吗
+- 这个程序是在执行你想让它执行的步骤吗
+- 变量是否重名
+
+set number
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set laststatus=2
+set mouse=a
+set scrolloff=4
+inoremap { {}<ESC>i
+inoremap {<CR> {<CR>}<ESC>O
+
+
+
+/*---------------------------- CSP2019-S/II RP++  ----------------------------*/
