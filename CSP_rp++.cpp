@@ -9,7 +9,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/* 读入优化 */
+/*-------------------------------- 读入优化 --------------------------------*/
 inline int read() {
     int x = 0; int f = 1; char ch = getchar();
     while (!isdigit(ch)) {if (ch == '-') f = -1; ch = getchar();}
@@ -19,7 +19,7 @@ inline int read() {
 
 
 
-/*-------- 存储及逻辑 --------*/ 
+/*-------------------------------- 存储及逻辑 --------------------------------*/ 
 int       --> 2 ^ 31 - 1 --> 2e9  --> 4 bytes
 long long --> 2 ^ 63 - 1 --> 9e18 --> 8 bytes
 char      --> 2 ^ 7 - 1  --> 127  --> 1 byte
@@ -54,7 +54,7 @@ lowbit(x) = x & (~x + 1) = x & -x
 
 
 
-/*-------- STL常用 --------*/
+/*-------------------------------- STL常用 --------------------------------*/
 #include <vector>
 vector<int> a;
 a.size();
@@ -136,7 +136,7 @@ int id = lower_bound(a + 1, a + 1 + n, x) - a; //大于等于x的最小整数的
 
 
 
-/*-------- 基础算法 --------*/
+/*-------------------------------- 基础算法 --------------------------------*/
 // 前缀和
 for (int i = 1; i <= n; ++i) sum[i] = sum[i - 1] + a[i]; //l ~ r sum[r] - sum[l - 1];
 for (int i = 1; i <= n; ++i) {
@@ -145,9 +145,11 @@ for (int i = 1; i <= n; ++i) {
     }
 }
 
+
 // 差分
 b[1] = a[1];
 for (int i = 1; i <= n; ++i) b[i] = a[i] - a[i - 1];
+
 
 // 二分
 int l = 0, r /*= maxans*/;
@@ -159,6 +161,7 @@ while (l <= r) {
     } else r = mid - 1;
 }
 
+
 // 三分
 while (l < r) {
     int lmid = l + (r - l) / 3;
@@ -167,6 +170,7 @@ while (l < r) {
     else l = lmid;
 }
 ans: F(l)
+
 
 // 离散化
 for (int i = 1; i <= n; ++i) old[i] = a[i];
@@ -177,9 +181,10 @@ old[a[i]] --> a[i]
 
 
 
-/*-------- 数据结构 --------*/
+/*-------------------------------- 数据结构 --------------------------------*/
 // 堆
 priority_queue<int> q;
+
 
 // 并查集
 int ufs[maxn], n;
@@ -198,6 +203,7 @@ void unionn(int x, int y) {
     siz[y] += siz[x];
 }
 
+
 // ST表
 int a[maxn], f[maxn][30], n, m;
 for (int j = 1; j <= 20; ++j) {
@@ -211,10 +217,12 @@ for (int i = 1; i <= m; ++i) {
     printf("%d\n", max(f[l][k], f[r - (1 << k) + 1][k]));
 }
 
+
 // 树状数组
 int t[maxn], n;
 void add(int x, int k) { for (; x <= n; x += x & -x) t[x] += k; }
 int ask(int x) { int res = 0; for (; x; x -= x & -x) res += t[x]; return res; }
+
 
 // 树状数组求逆序对  注意要离散化!!!
 for (int i = n; i; --i) {
@@ -222,11 +230,13 @@ for (int i = n; i; --i) {
     add(a[i], 1);
 }
 
+
 // 树状数组求二位偏序  注意FG要放在一起离散化!!!
 for (LL i = n; i; --i) {
     ans += ask(F[i] - 1);
     add(G[i], 1);
 }
+
 
 // 二维树状数组
 int t1[maxn][maxn];
@@ -252,13 +262,13 @@ int ask(int x, int y) {
     }
     return res;
 }
-/**
- * add(c + 1, d + 1, k);
- * add(a, d + 1, -k);
- * add(c + 1, b, -k);
- * add(a, b, k);
- * printf("%d\n", ask(c, d) - ask(c, b - 1) - ask(a - 1, d) + ask(a - 1, b - 1));
- **/
+
+add(c + 1, d + 1, k);
+add(a, d + 1, -k);
+add(c + 1, b, -k);
+add(a, b, k);
+printf("%d\n", ask(c, d) - ask(c, b - 1) - ask(a - 1, d) + ask(a - 1, b - 1));
+
 
 // 线段树
 int n, m, a[maxn];
@@ -314,6 +324,7 @@ LL query(int p, int l, int r) {
     return ans;
 }
 
+
 // 莫队
 struct Query {
     int l, r, pos, id;
@@ -338,6 +349,7 @@ for (int i = 1; i <= m; ++i) {
     ans[q[i].id] = Ans;
 }
 
+
 // Hash表
 const int N = 2600;
 const int mod = (1 << 11) - 1;
@@ -354,6 +366,7 @@ struct Hash_Map {
         return val[cnt];
     }
 };
+
 
 // Trie
 struct Trie {
@@ -387,6 +400,7 @@ struct Trie {
         return val[u];
     }
 };
+
 
 // 平衡树Treap
 struct Treap {
@@ -523,7 +537,7 @@ void remove(int& p, int val) {
 
 
 
-/*-------- 图论 --------*/
+/*-------------------------------- 图论 --------------------------------*/
 // 欧拉回路
 void dfs(int x) {
     for (int y = 1; y <= maxn; ++y) {
@@ -555,6 +569,7 @@ if (cnt && cnt != 2) {
 }
 dfs(root);
 
+
 // SPFA
 void SPFA(int s) {
     memset(dis, 0x3f, sizeof(dis));
@@ -575,6 +590,25 @@ void SPFA(int s) {
         }
     }
 }
+
+// SPFA-SLF优化
+if (!vis[e.to]) {
+    vis[e.to] = true;
+    if (!q.empty() && dis[e.to] < dis[q.front()]) {
+        q.push_front(e.to);
+    } else {
+        q.push_back(e.to);
+    }
+}
+
+// SPFA判负环
+if (!vis[e.to]) {
+    vis[e.to] = true;
+    q.push(e.to);
+    cnt[e.to]++;
+}
+if (cnt[e.to] >= n) return true;
+
 
 // Dijkstra堆优化
 struct heap {
@@ -602,6 +636,7 @@ void Dijkstra(int s) {
     }
 }
 
+
 // Kruskal
 struct Edge {
     int from, to, val;
@@ -626,8 +661,558 @@ void Kruskal() {
     }
 }
 
+
+// Floyd
+for (int k = 1; k <= n; ++k) 
+    for (int i = 1; i <= n; ++i) 
+        for (int j = 1; j <= n; ++j)
+            dis[i][j] = min(dis[i][j], dis[i][k] + dis[k][j]);
+
+
 // 传递闭包
 for (int k = 1; k <= n; ++k) 
     for (int i = 1; i <= n; ++i)
         for (int j = 1; j <= n; ++j)
             G[i][j] |= G[i][k] & G[k][j];
+
+
+
+/*-------------------------------- Tarjan --------------------------------*/
+namespace Bridge {
+    int dfn[maxn], low[maxn], n, m, num;
+    bool bridge[maxn << 1];
+
+    void tarjan(int x, int in_edge) {
+        dfn[x] = low[x] = ++num;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (!dfn[e.to]) {
+                tarjan(e.to, i);
+                low[x] = min(low[x], low[e.to]);
+                if (low[e.to] > dfn[x]) {
+                    bridge[i] = bridge[i ^ 1] = true;
+                }
+            } else if (i != (in_edge ^ 1)) {
+                low[x] = min(low[x], dfn[e.to]);
+            }
+        }
+    }
+
+    int main() {
+        n = read(); m = read();
+        for (int i = 1; i <= m; ++i) {
+            int u = read(), v = read();
+            add(u, v); add(v, u);
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (!dfn[i]) {
+                tarjan(i, 0);
+            }
+        }
+        for (int i = 0; i < edges.size(); i += 2) {
+            if (bridge[i]) {
+                /* ... */
+            }
+        }
+        return 0;
+    }
+}
+
+namespace CutPoint {
+    int dfn[maxn], low[maxn], n, m, num, root;
+    bool cut[maxn];
+
+    void tarjan(int x) {
+        dfn[x] = low[x] = ++num;
+        int flag = 0;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (!dfn[e.to]) {
+                tarjan(e.to);
+                low[x] = min(low[x], low[e.to]);
+                if (low[e.to] >= dfn[x]) {
+                    flag++;
+                    if (x != root || flag > 1) cut[x] = true;
+                }
+            } else {
+                low[x] = min(low[x], dfn[e.to]);
+            }
+        }
+    }
+
+    int main() {
+        n = read(); m = read();
+        for (int i = 1; i <= m; ++i) {
+            int u = read(), v = read();
+            add(u, v); add(v, u);
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (!dfn[i]) {
+                root = i;
+                tarjan(i);
+            }
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (cut[i]) {
+                /* ... */
+            }
+        }
+        return 0;
+    }
+}
+
+namespace e_DCC {
+    using namespace Bridge;
+    int c[maxn], dcc;
+    
+    void dfs(int x) {
+        c[x] = dcc;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (c[e.to] || bridge[i]) continue;
+            dfs(e.to);
+        }
+    }
+
+    int main() {
+        n = read(); m = read();
+        for (int i = 1; i <= m; ++i) {
+            int u = read(), v = read();
+            add(u, v); add(v, u);
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (!dfn[i]) {
+                tarjan(i, 0);
+            }
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (!c[i]) {
+                ++dcc;
+                dfs(i);
+            }
+        }
+        /** 
+         * 共dcc个边双连通分量
+         * 点x属于第c[x]个边双连通分量
+         **/
+        return 0;
+    }
+}
+
+namespace e_DCC_ShrinkPoint {
+    using namespace e_DCC;
+    vector<Edge> nedges;
+    vector<int> nG[maxn];
+    void nadd(int u, int v) {
+        nedges.push_back(Edge(u, v));
+        int mm = nedges.size();
+        nG[u].push_back(mm - 1);
+    }
+
+    int ShrinkPoint() {
+        for (int i = 0; i < edges.size(); ++i) {
+            Edge& e1 = edges[i];
+            Edge& e2 = edges[i ^ 1];
+            if (c[e1.to] == c[e2.to]) continue;
+            nadd(c[e1.to], c[e2.to]);
+        }
+    }
+}
+
+namespace v_DCC {
+    bool cut[maxn];
+    int dfn[maxn], low[maxn], n, m, num, root;
+    vector<int> dcc[maxn]; int cnt;
+    stack<int> s;
+
+    void tarjan(int x) {
+        dfn[x] = low[x] = ++num; s.push(x);
+        if (x == root && G[x].empty()) {
+            dcc[++cnt].push_back(x);
+            return;
+        }
+        int flag = 0;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (!dfn[e.to]) {
+                tarjan(e.to);
+                low[x] = min(low[x], low[e.to]);
+                if (low[e.to] >= dfn[x]) {
+                    flag++; cnt++; int z;
+                    if (x != root || flag > 1) cut[x] = true;
+                    do {
+                        z = s.top(); s.pop();
+                        dcc[cnt].push_back(z);
+                    } while (z != e.to);
+                    dcc[cnt].push_back(x);
+                }
+            } else {
+                low[x] = min(low[x], dfn[e.to]);
+            }
+        }
+    }
+
+    int main() {
+        n = read(); m = read();
+        for (int i = 1; i <= m; ++i) {
+            int u = read(), v = read();
+            add(u, v); add(v, u);
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (!dfn[i]) {
+                root = i;
+                tarjan(i);
+            }
+        }
+        /**
+         * 共cnt个点双连通分量
+         * 每个v-DCC存储在dcc[i]中
+         **/
+        return 0;
+    }
+}
+
+namespace v_DCC_ShrinkPoint {
+    using namespace v_DCC;
+    vector<Edge> nedges;
+    vector<int> nG[maxn];
+    void nadd(int u, int v) {
+        nedges.push_back(Edge(u, v));
+        int mm = nedges.size();
+        nG[u].push_back(mm - 1);
+    }
+
+    int new_id[maxn], c[maxn];
+
+    int ShrinkPoint() {
+        num = cnt;
+        for (int i = 1; i <= n; ++i) {
+            if (cut[i]) {
+                new_id[i] = ++num;
+            }
+        }
+        for (int i = 1; i <= cnt; ++i) {
+            for (int j = 0; j < dcc[i].size(); ++j) {
+                int x = dcc[i][j];
+                if (cut[x]) {
+                    nadd(i, new_id[x]);
+                    nadd(new_id[x], i);
+                } else {
+                    c[x] = i;
+                }
+            }
+        }
+    }
+}
+
+namespace SCC {
+    int dfn[maxn], low[maxn], c[maxn];
+    int val[maxn], sum[maxn], n, m, num, cnt;
+    stack<int> s; bool ins[maxn];
+    vector<int> scc[maxn];
+
+    void tarjan(int x) {
+        dfn[x] = low[x] = ++num; s.push(x); ins[x] = true;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (!dfn[e.to]) {
+                tarjan(e.to);
+                low[x] = min(low[x], low[e.to]);
+            } else if (ins[e.to]) {
+                low[x] = min(low[x], dfn[e.to]);
+            }
+        }
+        if (dfn[x] == low[x]) {
+            cnt++; int y;
+            do {
+                y = s.top(); s.pop(); ins[y] = false;
+                c[y] = cnt; scc[cnt].push_back(y);
+                sum[cnt] += val[y];
+            } while (x != y);
+        }
+    }
+
+    int main() {
+        n = read(); m = read();
+        for (int i = 1; i <= m; ++i) {
+            int u = read(), v = read();
+            add(u, v);
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (!dfn[i]) {
+                tarjan(i);
+            }
+        }
+        /**
+         * 共cnt个强连通分量
+         * x所在的SCC编号为c[x]
+         * 编号为i的强连通分量所有点为scc[i]
+         **/
+        return 0;
+    }
+}
+
+namespace SCC_ShrinkPoint {
+    using namespace SCC;
+    vector<Edge> nedges;
+    vector<int> nG[maxn];
+    void nadd(int u, int v) {
+        nedges.push_back(Edge(u, v));
+        int mm = nedges.size();
+        nG[u].push_back(mm - 1);
+    }
+
+    int ShrinkPoint() {
+        for (int x = 1; x <= n; ++x) {
+            for (int i = 0; i < G[x].size(); ++i) {
+                Edge& e = edges[G[x][i]];
+                if (c[x] == c[e.to]) continue;
+                nadd(c[x], c[e.to]);
+            }
+        }
+    }
+}
+
+
+
+/*-------------------------------- 树上问题 --------------------------------*/
+namespace dep {
+    bool vis[maxn]; int dep[maxn];
+    vector<int> son[maxn];
+    void dfs(int x) {
+        vis[x] = true;
+        for (int i = 0; i < son[x].size(); ++i) {
+            int y = son[x][i];
+            if (vis[y]) continue;
+            dep[y] = dep[x] + 1;
+            dfs(y);
+        }
+    }
+}
+
+namespace center {
+    bool vis[maxn]; int size[maxn], n, ans, pos;
+    vector<int> son[maxn];
+    void dfs(int x) {
+        vis[x] = true; size[x] = 1;
+        int max_part = 0;
+        for (int i = 0; i < son[x].size(); ++i) {
+            int y = son[x][i];
+            if (vis[y]) continue;
+            dfs(y);
+            size[x] += size[y];
+            max_part = max(max_part, size[y]);
+        }
+        max_part = max(max_part, n - size[x]);
+        if (max_part < ans) {
+            ans = max_part; 
+            pos = x;
+        }
+    }
+}
+
+namespace diameter {
+    int ans;
+    int dfs(int x) {
+        int res1 = 0, res2 = 0;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            res2 = max(res2, dfs(e.to) + e.val);
+            if (res2 > res1) swap(res1, res2);
+        }
+        ans = max(ans, res1 + res2);
+        return res1;
+    }
+}
+
+namespace LCA {
+    int f[maxn][20], d[maxn];
+    int n, m, t;
+    void bfs(int s) {
+        queue<int> q;
+        q.push(s); d[s] = 1;
+        while (!q.empty()) {
+            int x = q.front(); q.pop();
+            for (int i = 0; i < G[x].size(); ++i) {
+                Edge& e = edges[G[x][i]];
+                if (d[e.to]) continue;
+                d[e.to] = d[x] + 1;
+                f[e.to][0] = x;
+                for (int j = 1; j <= t; ++j) {
+                    f[e.to][j] = f[f[e.to][j - 1]][j - 1];
+                }
+                q.push(e.to);
+            }
+        }
+    }
+    int lca(int x, int y) {
+        if (d[x] > d[y]) swap(x, y);
+        for (int i = t; i >= 0; --i) {
+            if (d[f[y][i]] >= d[x]) y = f[y][i];
+        }
+        if (x == y) return x;
+        for (int i = t; i >= 0; --i) {
+            if (f[x][i] != f[y][i]) {
+                x = f[x][i];
+                y = f[y][i];
+            }
+        }
+        return f[x][0];
+    }
+}
+
+namespace LCA_TreeChainSplit {
+    int n, m, s;
+    int dep[maxn], siz[maxn], fa[maxn], son[maxn], top[maxn];
+    void dfs1(int x, int f, int depth) {
+        dep[x] = depth; fa[x] = f;
+        siz[x] = 1; int maxs = -1;
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (e.to == f) continue;
+            dfs1(e.to, x, depth + 1);
+            siz[x] += siz[e.to];
+            if (siz[e.to] > maxs) {
+                son[x] = e.to;
+                maxs = siz[e.to];
+            }
+        }
+    }
+    void dfs2(int x, int topf) {
+        top[x] = topf;
+        if (!son[x]) return;
+        dfs2(son[x], topf);
+        for (int i = 0; i < G[x].size(); ++i) {
+            Edge& e = edges[G[x][i]];
+            if (e.to == fa[x] || e.to == son[x]) continue;
+            dfs2(e.to, e.to);
+        }
+    }
+    int lca(int x, int y) {
+        while (top[x] != top[y]) {
+            if (dep[top[x]] < dep[top[y]]) swap(x, y);
+            x = fa[top[x]];
+        }
+        if (dep[x] > dep[y]) swap(x, y);
+        return x;
+    }
+    /* dfs1(root, 0, 1); dfs2(root, root); */
+}
+
+
+
+/*-------------------------------- 数学 --------------------------------*/
+// 最大公约数
+LL gcd(LL a, LL b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+
+// 扩展欧几里得
+void exgcd(LL a, LL b, LL& d, LL& x, LL& y) {
+    if (!b) { d = a; x = 1; y = 0; }
+    else { exgcd(b, a % b, d, y, x); y -= x * (a / b); }
+}
+
+
+// 筛质数
+LL vis[maxn];
+LL prime[maxn], sum[maxn], num;
+void getprime(LL n) {
+    memset(vis, 0, sizeof(vis));
+    for (int i = 2; i <= n; ++i) {
+        if (vis[i] == 0) {
+            vis[i] = i;
+            prime[++num] = i;
+        }
+        for (int j = 1; j <= num; ++j) {
+            if (prime[j] > vis[i] || prime[j] > n / i) break;
+            vis[i * prime[j]] = prime[j];
+        }
+    }
+}
+
+
+// 快速乘
+LL mul_mod(LL a, LL b, LL n){
+    LL res = 0;
+    while (b > 0) {
+        if (b & 1) res = (res + a) % n;
+        a = (a + a) % n;
+        b >>= 1;
+    }
+    return res;
+}
+
+
+// 快速幂
+LL pow_mod(LL a, LL p, LL n){
+    int res = 1;
+    while (p) {
+        if (p & 1) res = 1LL * res * a % n;
+        a = 1LL * a * a % n;
+        p >>= 1;
+    }
+    return res;
+}
+
+
+// 欧拉函数
+int phi(int n) {
+    int m = (int)sqrt(n + 0.5); int ans = n;
+    for (int i = 2; i <= m; ++i) if (n % i == 0) {
+        ans = ans / i * (i - 1);
+        while (n % i == 0) n /= i;
+    }
+    if (n > 1) ans = ans / n * (n - 1);
+    return ans;
+}
+
+
+// 乘法逆元
+LL inv(LL a, LL n) {
+    LL d, x, y;
+    exgcd(a, n, d, x, y);
+    return d == 1 ? (x + n) % n : -1;
+}
+p为质数时, inv=a^(p-2);
+
+
+// 求正约数集合
+vector<int> fac;
+for (int i = 1; i * i <= n; ++i) {
+    if (n % i == 0) {
+        fac.push_back(i);
+        if (i != n / i) fac.push_back(n / i);
+    }
+}
+
+
+// 斐波那契/矩阵
+struct Matrix {
+    LL mat[2][2];
+    Matrix() { memset(mat, 0, sizeof(mat)); }
+    Matrix operator * (const Matrix& a) const {
+        Matrix res; memset(res.mat, 0, sizeof(res.mat));
+        for (LL i = 0; i < 2; ++i) {
+            for (LL j = 0; j < 2; ++j) {
+                for (LL k = 0; k < 2; ++k) {
+                    res.mat[i][j] = (res.mat[i][j] + mat[i][k] * a.mat[k][j]) % mod;
+                }
+            }
+        }
+        return res;
+    }
+}Base, Fib;
+void Matrix_pow(LL pow) {
+    while (pow) {
+        if (pow & 1) Fib = Fib * Base;
+        Base = Base * Base;
+        pow >>= 1;
+    }
+}
+Base.mat[0][0] = 1; Base.mat[0][1] = 1;
+Base.mat[1][0] = 1; Base.mat[1][1] = 0;
+Fib.mat[0][0] = 1; Fib.mat[0][1] = 1;
+Matrix_pow(n - 2);
+fib(n) = Fib.mat[0][0];

@@ -1,0 +1,285 @@
+\documentclass[UTF8]{ctexart}
+
+\author{Tony\_Wong}
+\date{November 14, 2019}
+\title{\huge \textbf{子序列}相关问题}
+\usepackage{listings}
+\usepackage{fontspec}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+
+\lstset{
+	basicstyle=\fontspec{Monaco for Powerline},
+	tabsize=4,
+}
+
+\begin{document}
+
+
+\maketitle
+\tableofcontents
+
+\setcounter{section}{-1}
+
+\section{几个概念}
+设$A=\{a_1, a_2, a_3, ..., a_n\}$\\
+\textbf{子序列}:$B=\{a_{k_1}, a_{k_2}, a_{k_3}, ..., a_{k_p}\}$ 其中 $k_1 < k_2 < .. < k_p$\\
+\textbf{子串}:\ \ \ $B=\{a_i, a_{i + 1}, a_{i + 2}, ..., a_{j} \}$ 即\ \emph{连续子序列}
+
+\section{最长上升子序列(LIS)}
+\subsection{DP做法$O(n^2)$}
+
+\textbf{状态转移方程}:$ f[i]=\max\limits_{1\leq j<i \&\& a_j < a_i}\{f[j] + 1\} $
+
+\textbf{初值}: $f[0]=0$
+
+\textbf{结果}: $ \max\limits_{i\leq i\leq n}f[i] $\\
+
+\subsection{树状数组$O(n\log n)$}
+
+对于原序列每个元素,它有一个下标和一个权值,最长上升子序列实质就是求\textbf{最多有多少元素它们的下标和权值都单调递增}
+
+于是我们将$a$数组的每一个元素先记下它现在的下标,然后按照权值从小到大排序。接着我们按从小到大的顺序枚举$a$数组,(此时权值已经默认单调递增了)我们的转移也就变成从之前的标号比它小的状态转移过来,这个我们只需要建立一个\textbf{以编号为下标维护长度的最大值的树状数组}即可,枚举$a$数组时按元素的序号找到它之前序号比他小的长度最大的状态更新,然后将它也加入树状数组中
+
+\begin{lstlisting}
+struct Node {
+	int val, id;
+	bool operator < (const Node& a) const {
+		if (val == a.val) return id > a.id;
+		return val < a.val;
+	}
+}a[maxn];
+
+void add(int x, int k) { 
+	for (; x <= n; x += x & -x) t[x] = max(t[x], k); 
+}
+int ask(int x) {
+	int res = 0;
+	for (; x; x -= x & -x) res = max(res, t[x]);
+	return res;
+}
+
+for (int i = 1; i <= n; ++i) {
+	a[i].v = read(); a[i].id = i;
+}
+sort(a + 1, a + 1 + n);
+for (int i = 1; i <= n; ++i) {
+	add(a[i].id, ask(a[i].id) + 1);
+}
+
+Ans: ask(n)
+\end{lstlisting} 
+
+\subsection{贪心二分$O(n\log n)$}
+
+\begin{lstlisting}
+b[1] = a[1];
+int ans = 1;
+for (int i = 2; i <= n; i++) {
+	if (a[i] > b[len]) b[++ans] = a[i];
+	else {
+		int j = lower_bound(b + 1, b + len + 1, a[i]) - d; 
+		d[j] = a[i]; 
+	}
+}
+\end{lstlisting}
+
+\section{最长不下降子序列}
+\subsection{DP做法$O(n^2)$}
+
+把判断的小于号改为\textbf{小于等于号}
+
+\textbf{状态转移方程}:$ f[i]=\max\limits_{1\leq j<i \&\& a_j \leq a_i}\{f[j] + 1\} $
+
+\textbf{初值}: $f[0]=0$
+
+\textbf{结果}: $ \max\limits_{i\leq i\leq n}f[i] $\\
+
+\subsection{贪心二分$O(n\log n)$}
+
+大于改大于等于,lower改upper
+
+\begin{lstlisting}
+b[1] = a[1];
+int ans = 1;
+for (int i = 2; i <= n; i++) {
+	if (a[i] >= b[len]) b[++ans] = a[i];
+	else {
+		int j = upper_bound(b + 1, b + len + 1, a[i]) - d; 
+		d[j] = a[i]; 
+	}
+}
+\end{lstlisting}
+
+\section{最长上升子串}
+
+\subsection{DP做法$O(n^2)$}
+在DP时判断一下\texttt{i-j==1}
+
+\subsection{扫描$O(n)$}
+\begin{lstlisting}
+int res = 1, ans = 1;
+for (int i = 2; i <= n; ++i) {
+	if (a[i] > a[i - 1]) res++;
+	else res = 1;
+	ans = max(ans, res);
+}
+\end{lstlisting}
+
+
+\section{最长公共子序列(LCS)}
+\subsection{DP $O(n^2)$}
+
+$f[i][j]$表示$a_{1\sim i}$与$b_{1\sim j}$的LCS长度
+
+\textbf{状态转移方程}: 如果$a[i] = b[j]$则$f[i][j] = max(f[i][j], f[i - 1][j - 1]+1)$
+
+\qquad\qquad\qquad\ \  否则$f[i][j] = max(f[i - 1][j], f[i][j - 1])$
+
+\textbf{边界}:$f[i][0]=0, f[0][j]=0$
+
+\textbf{结果}:$f[n][m]$
+
+
+\section{最长公共上升子序列(LCIS)}
+\subsection{三重循环DP $O(n^3)$}
+
+\begin{lstlisting}
+for (int i = 1; i <= n; ++i) {
+	for (int j = 1; j <= m; ++j) {
+		if (a[i] == b[j]) {
+			for (int k = 0; k < j; ++k) {
+				if (b[k] < a[i]) {
+					f[i][j] = max(f[i][j], f[i - 1][k] + 1);
+				}
+			}
+		} else {
+			f[i][j] = f[i - 1][j];
+		}
+	}
+}
+
+Ans: f[n][m]
+\end{lstlisting}
+
+\subsection{二重循环DP $O(n^2)$}
+
+\begin{lstlisting}
+for (int i = 1; i <= n; ++i) {
+	int val = 0;
+	if (b[0] < a[i]) val = f[i - 1][0];
+	for (int j = 1; j <= m; ++j) {
+		if (a[i] == b[j]) f[i][j] = val + 1;
+		else f[i][j] = f[i - 1][j];
+		if (b[j] < a[i]) val = max(val, f[i - 1][j]);
+	}
+}
+\end{lstlisting}
+
+
+\section{最长公共子串}
+\subsection{DP $O(n^2)$}
+
+\begin{lstlisting}
+for (int i = 1; i <= n; i++) {
+	for (int j = 1; j <= m; j++) {
+		if(a[i - 1] == b[j - 1]) {
+			f[i][j] = f[i -1][j - 1] + 1;
+			res = max(res, dp[i][j]);
+		} else {
+			dp[i][j] = 0;
+		}
+	}
+}	
+\end{lstlisting}
+
+\section{最长公共前缀}
+
+将字符串插入$Trie$树,然后在树上查询$LCA$的$dep$
+
+\section{三元上升子序列}
+
+$Luogu\ P1637$ \textbf{\emph{注意要离散化}}
+
+\begin{lstlisting}
+for (int i = 1; i <= n; ++i) {
+	add1(a[i], 1);
+	cntl[i] = ask1(a[i] - 1);
+}
+for (int i = n; i >= 1; --i) {
+	add2(a[i], 1);
+	cntr[i] = n - i - ask2(a[i]) + 1;
+}
+for (int i = 2; i < n; ++i) {
+	ans += cntl[i] * cntr[i];
+}
+\end{lstlisting}
+
+\section{最小m段和}
+
+\begin{lstlisting}
+for (int i = 1; i <= n; ++i) {
+	sum[i] = sum[i - 1] + a[i];
+}
+for (int i = 1; i <= n; ++i) {
+	dp[i][i] = max(dp[i - 1][i - 1], a[i]);
+	for (int j = 1; j <= min(i, k); ++j) {
+		for (int m = j - 1; m < i; ++m) {
+			dp[i][j] = min(dp[i][j], max(sum[i] - sum[m], 
+dp[m][j - 1]));
+		}
+	}
+}
+
+Ans: min(dp[i][k]) k<=i<=n
+\end{lstlisting}
+
+\section{最大子段和}
+\subsection{暴力 $O(n^3)$/$O(n^2)$}
+\subsection{DP $O(n)$}
+$f[i]$为$a_{1\sim i}$从$a_i$向前延伸得到的最大子段和
+
+\textbf{状态转移方程}:$f[i] = max(f[i - 1] + a[i], a[i])$且$2\leq i\leq n$
+
+\textbf{边界}:$f[1] = max(0, a[1])$
+
+\textbf{结果}:$\max\limits_{1\leq i\leq n}f[i]$
+
+
+\section{逆序对}
+
+注意要\textbf{离散化}
+
+\begin{lstlisting}
+for (int i = n; i; --i) {
+	ans += ask(a[i] - 1);
+	add(a[i], 1);
+}
+\end{lstlisting}
+
+\subsection{二维偏序}
+
+注意$FG$要\textbf{放在一起离散化}
+
+\begin{lstlisting}
+for (int i = n; i; --i) {
+	ans += ask(F[i] - 1);
+	add(G[i], 1);
+}
+\end{lstlisting}
+
+\section*{附.\ \  离散化}
+
+将原数组复制一份,再排序(sort)去重(unique)
+
+\begin{lstlisting}
+for (int i = 1; i <= n; ++i) old[i] = a[i];
+sort(old + 1, old + 1 + n);
+int len = unique(old + 1, old + 1 + n) - old - 1;
+for (int i = 1; i <= n; ++i) 
+	a[i] = lower_bound(old + 1, old + 1 + len, a[i]) - old;
+\end{lstlisting}
+
+操作之后的数组为\texttt{a[i]},原数为\texttt{old[a[i]]}\ \ 即\texttt{a[i]}替换了\texttt{old[a[i]]}
+
+
+\end{document}
