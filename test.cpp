@@ -4,9 +4,6 @@ using namespace std;
 int a[100];
 
 int main() {
-    for (int i = 0; i <= 99; ++i) a[i] = i;
-    for (auto i : a) {
-        printf("%d\n", i);
-    }
+        printf("%d\n", 'A');
     return 0;
 }
