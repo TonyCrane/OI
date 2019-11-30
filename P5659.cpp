@@ -71,7 +71,70 @@ namespace Subtask2 { // 25分 菊花图
 }
 
 namespace Subtask3 { // 25分 链
-    
+    bool vis[maxn];
+    int lid[maxn], lst[maxn], cnt = 0, mrk[maxn], ans[maxn];
+    void init() {
+        memset(mrk, 0, sizeof(mrk));
+        memset(vis, 0, sizeof(vis));
+        cnt = 0;
+    }
+    void dfs(int u, int fa) {
+        lid[u] = ++cnt;
+        lst[cnt] = u;
+        for (int i = 0; i < G[u].size(); ++i) {
+            int v = G[u][i];
+            if (v == fa) continue;
+            dfs(v, u);
+        }
+    }
+    bool check_l(int u, int v) {
+        u = lid[u], v = lid[v];
+        if (mrk[u] == 1 || mrk[v] == 1) return false;
+        for (int i = u + 1; i <= v - 1; ++i) if (mrk[i] == 2) return false;
+        return true;
+    }
+    bool check_r(int u, int v) {
+        u = lid[u], v = lid[v];
+        if (mrk[u] == 2 || mrk[v] == 2) return false;
+        for (int i = v + 1; i <= u - 1; ++i) if (mrk[i] == 1) return false;
+        return true; 
+    }
+    void mark_l(int u, int v) {
+        u = lid[u], v = lid[v];
+        if (u != 1 && u != n) mrk[u] = 2;
+        if (v != 1 && v != n) mrk[v] = 2;
+        for (int i = u + 1; i <= v - 1; ++i) mrk[i] = 1;
+    }
+    void mark_r(int u, int v) {
+        u = lid[u], v = lid[v];
+        if (u != 1 && u != n) mrk[u] = 1;
+        if (v != 1 && v != n) mrk[v] = 1;
+        for (int i = v + 1; i <= u - 1; ++i) mrk[i] = 2;
+    }
+    void work() {
+        init();
+        for (int i = 1; i <= n; ++i) if (deg[i] == 1) {
+            dfs(i, 0);
+            break;
+        }
+        for (int i = 1; i <= n; ++i) for (int j = 1; j <= n; ++j) {
+            if (!vis[j] && lid[val[i]] != lid[j]) {
+                int u = val[i], v = j;
+                bool valid = false;
+                if (lid[u] <= lid[v] && check_l(u, v)) {
+                    mark_l(u, v);
+                    valid = true;
+                } else if (check_r(u, v)) {
+                    mark_r(u, v);
+                    valid = true;
+                }
+                if (valid) { ans[i] = j; vis[j] = true; break; }
+            }
+        }
+        for (int i = 1; i <= n; ++i) printf("%d ", ans[i]);
+        puts("");
+        return;
+    }
 }
 
 bool isSub2 = false, isSub3 = true;
@@ -81,6 +144,9 @@ void init() {
         id[i] = read();
         val[id[i]] = i;
     }
+    memset(deg, 0, sizeof(deg));
+    isSub2 = false; isSub3 = true;
+    for (int i = 0; i <= maxn - 1; ++i) G[i].clear();
     for (int i = 1; i < n; ++i) {
         int u = read(), v = read();
         G[u].push_back(v);
