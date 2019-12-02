@@ -118,8 +118,8 @@ namespace Subtask3 { // 25分 链
             break;
         }
         for (int i = 1; i <= n; ++i) for (int j = 1; j <= n; ++j) {
-            if (!vis[j] && lid[val[i]] != lid[j]) {
-                int u = val[i], v = j;
+            if (!vis[j] && lid[id[i]] != lid[j]) {
+                int u = id[i], v = j;
                 bool valid = false;
                 if (lid[u] <= lid[v] && check_l(u, v)) {
                     mark_l(u, v);
