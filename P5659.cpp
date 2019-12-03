@@ -121,9 +121,11 @@ namespace Subtask3 { // 25分 链
             if (!vis[j] && lid[id[i]] != lid[j]) {
                 int u = id[i], v = j;
                 bool valid = false;
-                if (lid[u] <= lid[v] && check_l(u, v)) {
-                    mark_l(u, v);
-                    valid = true;
+                if (lid[u] <= lid[v]) {
+                    if (check_l(u, v)) {
+                        mark_l(u, v);
+                        valid = true;
+                    }
                 } else if (check_r(u, v)) {
                     mark_r(u, v);
                     valid = true;
@@ -157,14 +159,19 @@ void init() {
     }
 }
 
+namespace Fullmark { // 100分 正解
+
+}
+
 int main() {
     int T = read();
     while (T--) {
         n = read();
-        if (n <= 10) { Subtask1::work(); continue; }
-        init();
-        if (isSub2) Subtask2::work();
-        else if (isSub3) Subtask3::work();
+        // if (n <= 10) { Subtask1::work(); continue; }
+        // init();
+        // if (isSub2) Subtask2::work();
+        // else if (isSub3) Subtask3::work();
+        Fullmark::work();
     }
     return 0;
 }
