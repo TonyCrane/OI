@@ -557,20 +557,15 @@ void inv(LL** a) {
  */
 void Lagrange() {
     int n = read(), k = read(), x[2010], y[2010];
-    for (int i = 1; i <= n; ++i) {
-        x[i] = read(); y[i] = read();
+    for (int i = 0; i < n; ++i) x[i] = read(), y[i] = read();
+    for (int i = 0; i < n; ++i) {
+        long long tmp = 1;
+        for (int j = 0; j < n; ++j) if (j != i) tmp = tmp * (x[i] - x[j] + mod) % mod;
+        tmp = inv(tmp);
+        for (int j = 0; j < n; ++j) if (j != i) tmp = tmp * (k - x[j] + mod) % mod;
+        tmp = tmp * y[i] % mod;
+        ans = (ans + tmp) % mod;
     }
-    int ans = 0;
-    for (int i = 1; i <= n; ++i) {
-        int cnt = 1;
-        for (int j = 1; j <= n; ++j) {
-            if (j != i) {
-                cnt = (1LL * cnt * (k - x[j]) % p * inv(x[i] - x[j], p)) % p;
-            }
-        }
-        ans = (ans + 1LL * cnt * y[i] % p) % p;
-    }
-    printf("%d\n", (ans + p) % p);
 }
 
 /**
