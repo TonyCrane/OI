@@ -15,12 +15,12 @@ inline int read() {
     return x * f;
 }
 
-const int maxn = 2000010;
+const int maxn = 2100010;
 const double PI = acos(-1.0);
 
 struct Complex {
     double r, i;
-    Complex() {}
+    Complex() { r = 0, i = 0; }
     Complex(double real, double imag): r(real), i(imag) {}
 }F[maxn], G[maxn];
 Complex operator + (Complex a, Complex b) { return Complex(a.r + b.r, a.i + b.i); }
@@ -45,7 +45,7 @@ void FFT(int lim, Complex* A, int opt) {
 int main() {
     int n = read(), m = read();
     for (int i = 0; i <= n; ++i) F[i].r = read();
-    for (int i = 0; i <= n; ++i) G[i].r = read();
+    for (int i = 0; i <= m; ++i) G[i].r = read();
     int lim = 1;
     while (lim <= n + m) lim <<= 1;
     FFT(lim, F, 1);
