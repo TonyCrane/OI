@@ -30,7 +30,7 @@ Complex operator * (Complex a, Complex b) { return Complex(a.r * b.r - a.i * b.i
 void FFT(int lim, Complex* A, int opt) {
     if (lim == 1) return;
     Complex a0[lim >> 1], a1[lim >> 1];
-    for (int i = 0; i <= lim; i += 2) a0[i >> 1] = A[i], a1[i >> 1] = A[i + 1];
+    for (int i = 0; i < lim; i += 2) a0[i >> 1] = A[i], a1[i >> 1] = A[i + 1];
     FFT(lim >> 1, a0, opt);
     FFT(lim >> 1, a1, opt);
     Complex wn = Complex(cos(2.0 * PI / lim), opt * sin(2.0 * PI / lim));
