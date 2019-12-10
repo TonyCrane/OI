@@ -47,7 +47,8 @@ void FFT(Complex* A, int opt) {
     }
 }
 
-int n, m, ans = 0x3f3f3f3f;
+int n, m;
+long long ans = 0x3f3f3f3f3f3f3f3f;
 int x[maxn], y[maxn], x2, y2, sx, sy;
 
 int main() {
@@ -70,9 +71,11 @@ int main() {
     for (int i = 0; i <= lim; ++i) F[i] = F[i] * G[i];
     FFT(F, -1);
     for (int i = 0; i <= 3 * n; ++i) F[i].r = (int)(F[i].r / lim + 0.5);
-    for (int i = 0; i < m; ++i) {
+    for (int i = 0; i < n; ++i) {
         for (int delta = -m; delta <= m; ++delta) {
-            ans = min(ans, x2 + y2 + 2 * delta * )
+            ans = min(ans, x2 + y2 + 2LL * delta * sx - 2LL * delta * sy + 1LL * delta * delta * n - 2LL * (long long)F[i + n].r);
         }
     }
+    printf("%lld\n", ans);
+    return 0;
 }
