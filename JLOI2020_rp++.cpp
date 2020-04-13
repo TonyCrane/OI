@@ -94,3 +94,60 @@ void NTT(LL* A, int opt) {
         for (int i = 0; i < lim; ++i) A[i] = A[i] * inv % mod;
     }
 }
+
+
+
+/*-------------------------------- 数据结构 --------------------------------*/
+
+/* 线性基 */
+int n;
+LL a[maxn], p[64];
+bool flag = true;  // 全能插入,则为true,有插入失败的,则为false
+
+bool insert(LL x) {
+    for (int i = 61; i >= 0; --i) {
+        if (x & (1LL << i)) {
+            if (p[i]) x ^= p[i];
+            else {
+                p[i] = x;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+LL queryMax() {
+    LL ans = 0;
+    for (int i = 61; i >= 0; --i) {
+        if ((ans ^ p[i]) > ans) {
+            ans ^= p[i];
+        }
+    }
+    return ans;
+}
+
+LL queryMin() {
+    if (!flag) return 0LL;
+    for (int i = 0; i <= 61; ++i) {
+        if (p[i]) return p[i];
+    }
+}
+
+LL queryKth(LL k) { // 第k小
+    if (k == 1LL && !flag) return 0;
+    if (!flag) k--;
+    for (int i = 1; i <= 61; ++i) {
+        for (int j = 1; j <= i; ++j) {
+            if (p[i] & (1LL << (j - 1))) p[i] ^= p[j - 1];
+        }
+    }
+    LL ans = 0;
+    for (int i = 0; i <= 61; ++i) {
+        if (d[i] != 0) {
+            if (k & 1) ans ^= p[i];
+            k /= 2;
+        }
+    }
+    return ans;
+}
