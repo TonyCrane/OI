@@ -29,8 +29,10 @@ vector<Edge> edges;
 vector<int> G[maxn];
 void add(int u, int v) {
     edges.push_back(Edge(u, v));
+    edges.push_back(Edge(v, u));
     int mm = edges.size();
-    G[u].push_back(mm - 1);
+    G[v].push_back(mm - 1);
+    G[u].push_back(mm - 2);
 }
 
 bool insert(LL* p, LL x) {
@@ -54,23 +56,13 @@ void merge(LL* p1, LL* p2) {
     }
 }
 
-void bfs(int s) {
-    queue<int> q;
-    q.push(s); d[s] = 1;
-    while (!q.empty()) {
-        int x = q.front(); q.pop();
-        for (int i = 0; i < G[x].size(); ++i) {
-            Edge& e = edges[G[x][i]];
-            if (d[e.to]) continue;
-            d[e.to] = d[x] + 1;
-            f[e.to][0] = x;
-            for (int j = 1; j <= 20; ++j) {
-                f[e.to][j] = f[f[e.to][j - 1]][j - 1];
-                memcpy(p[e.to][j], p[e.to][j - 1], sizeof(p[e.to][j - 1]));
-                merge(p[e.to][j], p[f[e.to][j - 1]][j - 1]);
-            }
-            q.push(e.to);
-        }
+void dfs(int u, int fa) {
+    f[u][0] = fa;
+    d[u] = d[fa] + 1;
+    for (int i = 0; i < G[u].size(); ++i) {
+        Edge& e = edges[G[u][i]];
+        if (e.to == fa) continue;
+        dfs(e.to, u);
     }
 }
 
@@ -102,20 +94,28 @@ void lca(int x, int y) {
 int main() {
     n = read(); q = read();
     for (int i = 1; i <= n; ++i) {
-        insert(p[i][0], read());
+        LL a = read();
+        insert(p[i][0], a);
     }
     for (int i = 1; i <= n - 1; ++i) {
         int u = read(), v = read();
         add(u, v);
     }
-    bfs(1);
+    dfs(1, 0);
+    for (int j = 1; j <= 20; ++j) {
+        for (int i = 1; i <= n; ++i) {
+            f[i][j] = f[f[i][j - 1]][j - 1];
+            memcpy(p[i][j], p[i][j - 1], sizeof(p[i][j - 1]));
+            merge(p[i][j], p[f[i][j - 1]][j - 1]);
+        }
+    }
     for (int i = 1; i <= q; ++i) {
         memset(ans, 0, sizeof(ans));
         int u = read(), v = read();
         lca(u, v);
         LL res = 0;
         for (int j = 61; j >= 0; --j) {
-            if (res ^ ans[j] > res) res ^= ans[j];
+            if ((res ^ ans[j]) > res) res ^= ans[j];
         }
         printf("%lld\n", res);
     }
