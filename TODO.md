@@ -14,5 +14,4 @@
 - [ ] 续写LaTeX
 - [ ] 转战BZOJ，准备省选
 
-# CSP-II 25 Days Left
-rp++
+__`_(:з」∠)_`__

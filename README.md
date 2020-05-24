@@ -1,28 +1,22 @@
-# 洛谷
+## OI代码存储库
 
-### 目录列表
-- luogu
-	洛谷题库部分源码,输入,输出
-- bzoj
-	大视野(BZOJ)题库部分源码,输入,输出
-- codevs
-	code[vs]题库部分源码,输入,输出
-- hdu
-	hdu题库部分源码,输入,输出
-- NetworkFlow24
-	网络流24题部分源码,输入,输出
-- UVa
-	UVa题库部分源码,输入,输出
-- NOIp2018
-	NOIp2018部分源码,输入,输出
-- NOIp2017
-	NOIp2017部分源码,输入,输出
-- NOIp2016
-	NOIp2016部分源码,输入,输出
-- script
-	一些脚本文件
-	- [x] cnt 统计代码总长
-	- [x] create 创建题目输入输出(源码)脚本
-	- [x] del 删除题目输入输出(源码)脚本
-	- [x] push 上传GitHub脚本
-	- [x] run 运行并检查输出
+这个repo用来放一些我学OI时写的代码，主要OJ使用Luogu
+
+我的博客：https://tony031218.github.io/
+
+在文件夹里面的是各个OJ上的题目，文件名为题目编号<br/>
+在文件夹外面的是我在考前整理的模板
+- __`CSP_rp++.cpp`__：NOIp/CSP-S复赛模板合集
+- __`JLOI2020_rp++.cpp`__：部分省选模板（摸了_(:з」∠)_
+- __`DataStructure.cpp`__：数据结构相关模板，复赛/省选都有
+- __`Graph.cpp`__：图论模板
+- __`Mathematics.cpp`__：数论模板
+- __`StringAlgorithms.cpp`__：字符串模板
+- __`tarjan.cpp`__：tarjan算法模板（割点缩点连通分量...）
+- __`Geometry.cpp`__：计算几何模板
+
+### OI目前状态
+- NOIp2018 流下了省四的泪水
+- CSP-S2019 流下了弱省省一的泪水
+- JLOI2020 本来想努把力冲省队，但是好像摸了_(:з」∠)_
+- NOIp2020 没开始，想再去摸一把_(:з」∠)_
