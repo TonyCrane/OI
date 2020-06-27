@@ -1,5 +1,5 @@
 /*************************************************************
- *  > Description      : 复赛相关模板
+ *  > Description      : 省选相关模板
  *  > File Name        : JLOI2020_rp++.cpp
  *  > Author           : Tony_Wong
  *  > Created Time     : 2019/12/12 12:20:39
